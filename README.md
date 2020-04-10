@@ -1,5 +1,9 @@
 # Simple real-time job reporting watch application (React/Tizen)
 
+## Original Version with deploy.cmd Branch
+In the original version I adapted the concepts from rovale, and the build process was totalli CLI with a deploy.cmd. This version was not at all compatible with Tizen Studio, the compatibility with which is terribly important for debuggability especially on real watch. Now I have a Galaxy Watch and I want Tizen Studio compatibility.
+So, I backup this original version into this branch, and I restart the project in the main branch. 
+
 ## Motivation
 This is an experimental project to use React and TypeScript to develop Tizen Web watch applications.
 What is great with TAU style shhets that it works quite reasonably on mobile devices, too, so with some careful approach the same application can work fine on both Galaxy Watch and any mobile phone.
