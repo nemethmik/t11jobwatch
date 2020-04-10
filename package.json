@@ -1,0 +1,24 @@
+{
+  "name": "typescript_classic_web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc --w",
+    "html:copy": "copyfiles -u 1 src/**.html src/**.ico src/**.png src/**.jpg dist/",
+    "css:copy": "copyfiles -u 1 src/**.css dist/",
+    "html:watch": "nodemon --ignore node_modules --ignore dist --watch src -e html,css -x \"npm run html:copy && npm run css:copy\"",
+    "start": "concurrently \"npm run html:watch\" \"npm run compile\""
+  },
+  "keywords": [],
+  "author": "Yogesh Jadhav",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^3.6.1",
+    "copyfiles": "^2.2.0",
+    "nodemon": "^1.19.4",
+    "tslint": "^5.20.1",
+    "typescript": "^3.8.3"
+  }
+}
