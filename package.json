@@ -1,0 +1,35 @@
+{
+  "name": "ts_jquery_browserify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "tsc --w",
+    "html:copy": "copyfiles -u 1 src/**.html dist/",
+    "css:copy": "copyfiles -u 1 src/**.css dist/",
+    "bundlejs": "browserify dist/scripts/index.js -o dist/bundle.js --debug",
+    "magic": "nodemon --watch dist/scripts -e js -x \"npm run bundlejs\"",
+    "html:watch": "nodemon --ignore node_modules --ignore dist --watch src -e html,css -x \"npm run html:copy && npm run css:copy\"",
+    "start": "concurrently \"npm run html:watch\" \"npm run compile\" \"npm run magic\"",
+    "bundlets": "browserify src/scripts/index.ts -p tsify -o dist/bundle.js --debug",
+    "watchifyts": "watchify src/scripts/index.ts -p tsify -o dist/bundle.js --debug -v"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jquery": "^3.3.34",
+    "browserify": "^16.5.1",
+    "concurrently": "^3.6.1",
+    "copyfiles": "^2.2.0",
+    "nodemon": "^1.19.4",
+    "tsify": "^4.0.1",
+    "tslint": "^5.20.1",
+    "typescript": "^3.8.3",
+    "watchify": "^3.11.1"
+  },
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
+}
