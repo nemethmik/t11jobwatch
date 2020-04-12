@@ -3,6 +3,7 @@
 The accompanying videos are 
 - [Using TypeScript, Visual Studio Code and Tizen Studio in Tizen Web Application Development (Part 1)](https://youtu.be/EjJ5mUXpO5c)
 - [Importing Samsung Certificate](https://youtu.be/vB7buvPogR8)
+- [Part 2, Refactoring app.ts into multiple modules](https://youtu.be/Hxqg42jmkYU)
 
 ## When cloned how to start the project?
 
