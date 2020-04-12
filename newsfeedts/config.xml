@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://tiva11.com/newsfeedts" version="1.0.0" viewmodes="maximized">
+    <access origin="https://www.tizen.org" subdomains="true"></access>
+    <tizen:application id="oVL7M99Fg2.newsfeedts" package="oVL7M99Fg2" required_version="2.3"/>
+    <author href="https://github.com/nemethmik" email="nemethmiklos1960@gmail.com">Miklos Nemeth</author>
+    <content src="index.html"/>
+    <description>This is a typescript version of the Tizen News Feed sample application.</description>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+    <icon src="icon.png"/>
+    <license href="https://nemethmik.github.io">MIT</license>
+    <name>newsfeedts</name>
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
+    <tizen:profile name="wearable"/>
+</widget>

@@ -1,0 +1,29 @@
+{
+  "name": "10newsfeedts",
+  "version": "1.0.0",
+  "description": "A remake of the Tizen News Feed sample application with TypeScript and optionally watchify/tsify",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemethmik/t11jobwatch.git"
+  },
+  "keywords": [
+    "TypeScript",
+    "Tizen"
+  ],
+  "author": "Miklos Nemeth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemethmik/t11jobwatch/issues"
+  },
+  "homepage": "https://github.com/nemethmik/t11jobwatch#readme",
+  "devDependencies": {
+    "copyfiles": "^2.2.0",
+    "tsify": "^4.0.1",
+    "typescript": "^3.8.3",
+    "watchify": "^3.11.1"
+  }
+}
