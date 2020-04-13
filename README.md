@@ -4,8 +4,12 @@ The accompanying videos are
 - [Using TypeScript, Visual Studio Code and Tizen Studio in Tizen Web Application Development (Part 1)](https://youtu.be/EjJ5mUXpO5c)
 - [Importing Samsung Certificate](https://youtu.be/vB7buvPogR8)
 - [Part 2, Refactoring app.ts into multiple modules](https://youtu.be/Hxqg42jmkYU)
+- [Tizen News Feed Sample Web App with fetch and async await - Part 3 of  Tizen with TypeScript Series](https://youtu.be/atNzQ5KkwgI)
 
 ## When cloned how to start the project?
+- **npm install** then **npm update**
+- **npm run build** to start the watchify/tsify compilation/bundling process
+- Start **Tizen Studio** and import the **newsfeedts** folder as project and debug/run from Tizen Studio. Remember you need Samsung certicicate to deploy onto Galaxy Watch.
 
 ## Initialization Steps
 - npm init

@@ -4,7 +4,9 @@
   "description": "A remake of the Tizen News Feed sample application with TypeScript and optionally watchify/tsify",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build":"watchify src/js/app.ts -v -p tsify --debug -o newsfeedts/js/app.js",
+    "nosourcemaps":"watchify src/js/app.ts -v -p tsify -o newsfeedts/js/app.js"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-import {fetchNews,INewsItem} from "./fetchNews"
+import {fetchNews,INewsItem, fetchNewsAsync} from "./fetchNews"
 import NewsRepo from "./newsRepo"
 
 let globalNewsRepo = new NewsRepo()
@@ -61,6 +61,19 @@ function getDataFromXML() {
     }
 }
 
+async function getDataFromXMLAsync() {
+    const XML_ADDRESS = "https://www.tizen.org/blogs/feed"
+    globalNewsRepo.indexDisplay = 0
+    try {
+        globalNewsRepo.arrayNews = await fetchNewsAsync(XML_ADDRESS)
+        emptyElement(areaNews())
+        showNews(globalNewsRepo)
+    } catch(e) {
+        if(e instanceof Error) addSubject(e.message)
+        else addSubject(e)
+    }
+}
+
 function setDefaultEvents():void {
     //@ts-ignore This is a Tizen device specific event and should be defined
     document.addEventListener("tizenhwkey", keyEventHandler)
@@ -70,7 +83,8 @@ function setDefaultEvents():void {
 
 function init():void {
     setDefaultEvents()
-    getDataFromXML()
+    //getDataFromXML()
+    getDataFromXMLAsync()
 }
 
 window.onload = init
