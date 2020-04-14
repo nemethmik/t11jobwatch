@@ -5,11 +5,14 @@ The accompanying videos are
 - [Importing Samsung Certificate](https://youtu.be/vB7buvPogR8)
 - [Part 2, Refactoring app.ts into multiple modules](https://youtu.be/Hxqg42jmkYU)
 - [Tizen News Feed Sample Web App with fetch and async await - Part 3 of  Tizen with TypeScript Series](https://youtu.be/atNzQ5KkwgI)
+- [How to disable CORS in Chrome browser for Tizen News Feed Demo Application?](https://youtu.be/MWFcdIk5UqM)
 
 ## When cloned how to start the project?
 - **npm install** then **npm update**
 - **npm run build** to start the watchify/tsify compilation/bundling process
 - Start **Tizen Studio** and import the **newsfeedts** folder as project and debug/run from Tizen Studio. Remember you need Samsung certicicate to deploy onto Galaxy Watch.
+- Optionally **npm run http** starts http-server for the web app folder newsfeedts
+- Optionally **npm run nocorschromemac** opens Chrome on Mac with web security disabled
 
 ## Initialization Steps
 - npm init

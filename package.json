@@ -6,7 +6,9 @@
   "scripts": {
     "test": "test",
     "build":"watchify src/js/app.ts -v -p tsify --debug -o newsfeedts/js/app.js",
-    "nosourcemaps":"watchify src/js/app.ts -v -p tsify -o newsfeedts/js/app.js"
+    "nosourcemaps":"watchify src/js/app.ts -v -p tsify -o newsfeedts/js/app.js",
+    "http":"npx http-server newsfeedts -c1-1", 
+    "nocorschromemac":"open -a \"Google Chrome\" --args --user-data-dir=/tmp/ttt --disable-web-security"
   },
   "repository": {
     "type": "git",
