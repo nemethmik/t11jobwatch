@@ -1,0 +1,30 @@
+{
+  "name": "t11jobwatch",
+  "version": "1.0.0",
+  "description": "A workspace for Tizen watch-enabled web apps including Money Book ",
+  "main": "./MoneyBook/index.html",
+  "dependencies": {},
+  "devDependencies": {
+    "tsify": "^4.0.1",
+    "typescript": "^3.8.3",
+    "watchify": "^3.11.1"
+  },
+  "scripts": {
+    "test": "test",
+    "compileall":"tsc --rootDir ./src --outDir ./",
+    "buildmoneybook": "watchify src/MoneyBook/js/test.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o MoneyBook/js/bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemethmik/t11jobwatch.git"
+  },
+  "keywords": [
+    "Tizen"
+  ],
+  "author": "Miklos Nemeth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemethmik/t11jobwatch/issues"
+  },
+  "homepage": "https://github.com/nemethmik/t11jobwatch#readme"
+}
