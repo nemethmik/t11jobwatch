@@ -3,7 +3,12 @@ Here a new improved concept is that the workspace folder may have multiple Tizen
 At the moment only MoneyBook is the only project we have in this workspace.
 The caveat is that tsconfig doesn't allow to set outDir to ./ and rootDir to ./srcs, but it is possible on the command line 
 **tsc --rootDir ./src/ --outDir ./** which brilliantly compiles all TS files in the src files and the resulting JS files are automatically directed to the approproate Tisen Studio projects. That's why it is important to make a subfolder under src for each project. However, watchify outputs only one bundle js, so watchify need separate npm scripts for each projects, like so **watchify src/MoneyBook/js/test.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o MoneyBook/js/bundle.js"**.
- 
+
+I gave a try to use the typescript compile to compile the projet into a single file, but it supports only amd and system module types for single-file-output optoion, but it is not supported by broswers, so, watchify is the way to go: tsc --module amd --rootDir ./src/MoneyBook --outFile ./MoneyBook/js/bundlets.js
+
+## TAUMobile and TAUWatch Projects
+Both of these are the regular TAU UI demo projects created with Tizen Studio. TAU version 1.1.8 included. I keep these projects here as references. They are built directly with Tizen Studio.
+
 ## What to do after cloning?
 - **npm install** and then **npm update**
 - **npm run buildmoneybook** starts watchify and builds the Money Book project
@@ -15,3 +20,5 @@ The caveat is that tsconfig doesn't allow to set outDir to ./ and rootDir to ./s
     - No need for copyfiles and browserify
     - http-server can be started on-demand with npx, no need to install
 - **npx tsc --init**
+- npm install @types/websql --save-dev
+    - The app is prepared to work with WebSQL, too.

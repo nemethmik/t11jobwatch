@@ -5,14 +5,17 @@
   "main": "./MoneyBook/index.html",
   "dependencies": {},
   "devDependencies": {
+    "@types/websql": "0.0.27",
     "tsify": "^4.0.1",
     "typescript": "^3.8.3",
     "watchify": "^3.11.1"
   },
   "scripts": {
     "test": "test",
-    "compileall":"tsc --rootDir ./src --outDir ./",
-    "buildmoneybook": "watchify src/MoneyBook/js/test.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o MoneyBook/js/bundle.js"
+    "compilemoneybookDONOTUSE": "tsc --module system --rootDir ./src/MoneyBook --outFile ./MoneyBook/js/bundlets.js",
+    "buildmoneybook": "watchify src/MoneyBook/js/app.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o ./MoneyBook/js/bundle.js",
+    "httpmoneybook":"npx http-server MoneyBook -c1-1 -o",
+    "httptaumobile":"npx http-server TAUMobile -c1-1 -o"
   },
   "repository": {
     "type": "git",
