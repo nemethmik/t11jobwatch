@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
+	<title>
+		Multiple Buttons
+	</title>
+	<link href="./lib/tau/wearable/theme/default/tau.css" rel="stylesheet" />
+	<link href="./lib/tau/wearable/theme/default/tau.circle.css" media="all and (-tizen-geometric-shape: circle)" rel="stylesheet" />
+	<link href="./css/style.css" rel="stylesheet" />
+	<link href="./css/style.circle.css" media="all and (-tizen-geometric-shape: circle)" rel="stylesheet" />
+	<script src="./js/circle-helper.js">
+	</script>
+	<script src="./lib/tau/wearable/js/tau.js">
+	</script>
+</head>
+
+<body>
+	<div class="ui-page  ui-page-active" id="bottomButtonWithMorePage">
+		<header>
+			<h2 class="ui-title">Multi-Button</h2>
+		</header>
+		<div class="ui-content ui-content-padding">
+			<p>This is example of multiple buttons.</p>
+			<p>This is example of multiple buttons.</p>
+			<p>This is example of multiple buttons.</p>
+			<p>This is example of multiple buttons.</p>
+			<p>This is example of multiple buttons.</p>
+		</div>
+		<!-- Circle Profile -->
+		<a class="ui-more" data-rel="popup" href="#moreButtonPopup"></a>
+		<div class="ui-popup" id="moreButtonPopup">
+			<div class="ui-selector" id="selector">
+				<div class="ui-item show-icon" data-title="Show">
+				</div>
+				<div class="ui-item human-icon" data-title="Human">
+				</div>
+			</div>
+		</div>
+		<footer class="ui-footer ui-grid-col-3 ui-bottom-button"> <!--  ui-bottom-button -->
+			<a class="ui-btn" href="#bottomButtonPage" >Go</a>
+			<a class="ui-btn" href="#bottomButtonPage" >Done</a>
+			<a class="ui-btn" href="#bottomButtonPage" >Nxt</a>
+		</footer>
+	</div>
+	<!-- src="multiplebutton.js" -->
+  <script>
+		(function () {
+			var page = document.querySelector("#bottomButtonWithMorePage"),
+				popup = page.querySelector("#moreButtonPopup"),
+				elSelector = page.querySelector("#selector"),
+				selector;
+			page.addEventListener("pagebeforeshow", function () {
+				var radius = window.innerHeight / 2 * 0.8;
+				if (tau.support.shape.circle) {
+					selector = tau.widget.Selector(elSelector, {itemRadius: radius});
+				}
+			});
+			page.addEventListener("pagehide", function () {
+				if (tau.support.shape.circle) {
+					//selector.destroy(); //When the page is in the same HTML this will kill functionality when the page is shown again
+				}
+			});
+			elSelector.addEventListener("click", function (event) {
+				var target = event.target;
+				if (tau.support.shape.circle) {
+					if (target.classList.contains("ui-selector-indicator")) {
+						tau.closePopup(popup);
+						if(target.innerText.match(/Show/i)) {
+							tau.changePage(document.getElementById("bottomButtonPage"))
+						}
+					}
+				}
+			});
+			// --------------- Rotary Events -----------------------
+			//var page = document.getElementById("bottomButtonWithMorePage");
+			page.addEventListener("pagebeforeshow", function (event) {
+				tau.util.rotaryScrolling.enable(event.target.firstElementChild);
+			});
+			page.addEventListener("pagehide", function () {
+				// Don't disable rotary when multiple pages are colocated in the same HTML document
+				// and other pages may want to use the rotary functionality
+				//tau.util.rotaryScrolling.disable();
+			});
+		}());
+  </script>
+
+<div class="ui-page" id="bottomButtonPage">
+	<header class="ui-header">
+		 <h2 class="ui-title">Bottom Button</h2>
+	</header>
+	<div class="ui-content content-padding">
+		 It was a real pleasure for me to finally get to meet you. My colleagues join me in sending you our holiday greetings.
+	</div>
+	<footer class="ui-footer ui-bottom-button">
+		 <a href="#bottomButtonWithMorePage" class="ui-btn">Button</a>
+	</footer>
+</div>
+<script>
+	(function () {
+		// --------------- Rotary Events -----------------------
+		var page = document.getElementById("bottomButtonPage");
+		page.addEventListener("pagebeforeshow", function (event) {
+			tau.util.rotaryScrolling.enable(event.target.firstElementChild);
+		});
+		page.addEventListener("pagehide", function () {
+			//tau.util.rotaryScrolling.disable();
+		});
+	}());
+</script>
+
+<script src="./js/app.js">
+	</script>
+	<script src="./js/lowBatteryCheck.js">
+	</script>
+</body>
+
+</html>

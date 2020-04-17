@@ -1,0 +1,35 @@
+<div id="header" style="display:flex;height:60pt;vertical-align: bottom;">
+    <!--input type="button" value="Btn1" style="flex:1;background-color: aquamarine;text-align: right;"/>
+    <input type="button" value="Btn2" style="flex:0.8;background-color:pink"/>
+    <input type="button" value="Btn3" style="flex:1;background-color:darkseagreen;text-align: left;"/>
+    <input type="button" value="Btn1" style="flex:1;background-color: aquamarine;text-align: right;"/-->
+    <div style="flex:1;background-color:aquamarine;text-align: right;padding-right: 4pt;vertical-align: bottom;">Btn2</div> 
+    <div style="flex:1;background-color:pink;text-align: center;vertical-align:text-bottom ;">Btn2</div> 
+    <div style="flex:1;background-color:darkseagreen;text-align: left;padding-left: 4pt;vertical-align: bottom;">Btn3</div>
+</div>
+
+<footer style="background-color: darkblue;"> <!--ui-bottom-button-->
+    <!--div class="ui-btn">Another</div>
+    <button class="ui-btn">Close</button-->
+    <!--a>Button 1</a> <a>Button 2</a-->
+    <!--button>btn1</button><button>btn2</button-->
+    <div style="display:flex;height:100%;">
+        <input type="button" value="Btn1" style="flex:1;background-color: aquamarine;text-align: right;"/> <!--style="float:left;"/-->
+        <input type="button" value="Btn2" style="flex:0.8;background-color:pink"/> <!--style="float:left;"/-->
+        <input type="button" value="Btn3" style="flex:1;background-color:darkseagreen;text-align: left;"/> <!--style="float:right;"/-->
+    </div>
+</footer>
+
+<script>
+    const next = document.getElementById("next")
+    next.addEventListener("click", function() {
+            tau.changePage("home");
+    });
+</script>
+
+<footer class="ui-footer ui-grid-col-3"
+style="align-items:start;position:absolute;bottom:0px;height:80px;left:0px;right:0px;overflow: hidden;"> <!--  ui-bottom-button -->
+<a class="ui-btn" href="#bottomButtonPage" style="background-color: rgb(2, 56, 92);text-align: right;">Bck</a>
+<a class="ui-btn" href="#bottomButtonPage" style="background-color: rgb(2, 56, 92);">Done</a>
+<a class="ui-btn" href="#bottomButtonPage" style="background-color: rgb(2, 56, 92);text-align: left;">Nxt</a>
+</footer>

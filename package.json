@@ -15,7 +15,8 @@
     "compilemoneybookDONOTUSE": "tsc --module system --rootDir ./src/MoneyBook --outFile ./MoneyBook/js/bundlets.js",
     "buildmoneybook": "watchify src/MoneyBook/js/app.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o ./MoneyBook/js/bundle.js",
     "httpmoneybook":"npx http-server MoneyBook -c1-1 -o",
-    "httptaumobile":"npx http-server TAUMobile -c1-1 -o"
+    "httptaumobile":"npx http-server TAUMobile -c1-1 -o",
+    "httptaubasicw":"npx http-server taubasicw -c1-1 -o"
   },
   "repository": {
     "type": "git",
