@@ -1,10 +1,14 @@
 # Tizen Studio Money Book Sample TSified with Multi-Project Build Support
-Here a new improved concept is that the workspace folder may have multiple Tizen Studio projects, so the src folder is separated for each projects.
-At the moment only MoneyBook is the only project we have in this workspace.
-The caveat is that tsconfig doesn't allow to set outDir to ./ and rootDir to ./srcs, but it is possible on the command line 
-**tsc --rootDir ./src/ --outDir ./** which brilliantly compiles all TS files in the src files and the resulting JS files are automatically directed to the approproate Tisen Studio projects. That's why it is important to make a subfolder under src for each project. However, watchify outputs only one bundle js, so watchify need separate npm scripts for each projects, like so **watchify src/MoneyBook/js/test.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o MoneyBook/js/bundle.js"**.
+Here a new improved concept is that the workspace folder may have multiple Tizen Studio applications, so the src folder is separated for each projects.
+Here are the applications we have in this repository/workspace:
+    - MoneyBook - is plain HTML/CSS app with Indexed DB. The project was completely TSified
+    - TAUMobile and TAUWatch are the original TAU sample applications just to keep them at hand.
+    - taubasicw - an experimental app with multi-button screen, in-document page navigation and rotary bezel integration 
 
-I gave a try to use the typescript compile to compile the projet into a single file, but it supports only amd and system module types for single-file-output optoion, but it is not supported by broswers, so, watchify is the way to go: tsc --module amd --rootDir ./src/MoneyBook --outFile ./MoneyBook/js/bundlets.js
+A caveat was that tsconfig doesn't allow to set outDir to ./ and rootDir to ./src, but it is possible on the command line 
+**tsc --rootDir ./src/ --outDir ./** which brilliantly compiles all TS files in the src files and the resulting JS files are automatically directed to the approproate Tizen Studio projects. That's why it is important to make a subfolder under src for each project. _However, watchify outputs only one bundle js_, so watchify need separate npm scripts for each projects, like so **watchify src/MoneyBook/js/test.ts -v -p [tsify --rootDir ./src/MoneyBook --outDir ./MoneyBook] --debug -o MoneyBook/js/bundle.js"**.
+
+I gave a try to use the typescript compiler to compile the projet into a single file, but it supports only amd and system module types for single-file-output optoion, but these are not supported by broswers, only commonjs; so, watchify is the way to go: tsc --module amd --rootDir ./src/MoneyBook --outFile ./MoneyBook/js/bundlets.js
 
 ## TAUMobile and TAUWatch Projects
 Both of these are the regular TAU UI demo projects created with Tizen Studio. TAU version 1.1.8 included. I keep these projects here as references. They are built directly with Tizen Studio.
