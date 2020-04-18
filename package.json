@@ -4,7 +4,8 @@
   "description": "A manufacturing job tracking application for SAP B1 or any ERP system",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "http": "npx http-server JobWatch -c1-1 -o"
   },
   "repository": {
     "type": "git",

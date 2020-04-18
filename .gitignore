@@ -2,3 +2,5 @@
 *.wgt
 /.metadata/
 /JobWatch/.sign
+/.CustomProfile
+.DS_Store

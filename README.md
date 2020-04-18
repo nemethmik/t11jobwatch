@@ -2,7 +2,7 @@
 
  ![Screen Navigation Sketch](t11jobwatchsketch.png)
 
- ## How I initialiyed the project
+ ## How I initialized the project
 - npm init
 - npm install typescript tsify watchify --save-dev
 - npx tsc --init
