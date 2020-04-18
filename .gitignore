@@ -1,3 +1,6 @@
 /.metadata/
 /.CustomProfile
 /node_modules
+*.wgt
+.sign
+
