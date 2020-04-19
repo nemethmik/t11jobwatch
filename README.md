@@ -6,5 +6,3 @@
 - npm init
 - npm install typescript tsify watchify --save-dev
 - npx tsc --init
-- Tizen Studio to create TAU UI sample app in JobWatch folder using the t11jobwatch folder as workspace
-
