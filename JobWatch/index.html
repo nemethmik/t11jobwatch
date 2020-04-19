@@ -25,12 +25,19 @@
 	<div data-role="header"><h1>Config</h1></div><!-- /header -->
 	<div class="ui-content">
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-              <input type="radio" name="radio-choice-b" id="radio-choice-c" value="http" checked="checked">
-              <label for="radio-choice-c">HTTP</label>
-              <input type="radio" name="radio-choice-b" id="radio-choice-d" value="https">
-              <label for="radio-choice-d">HTTPS</label>
-      </fieldset>       <input placeholder="Server Name" type="text" data-clear-btn="true" name="text-3" id="text-3" value="">
-       <input placeholder="Port Number" type="number" data-clear-btn="true" name="number-4" pattern="[0-9]*" id="number-4" value="">
+        <input type="radio" name="radio-choice-b" id="radio-choice-c" value="http" checked="checked">
+        <label for="radio-choice-c">HTTP</label>
+        <input type="radio" name="radio-choice-b" id="radio-choice-d" value="https">
+        <label for="radio-choice-d">HTTPS</label>
+    </fieldset>       
+    
+    <label>Server Name
+      <input placeholder="Server Name" type="text" data-clear-btn="true" name="text-3" id="text-3" style="text-align: center;">
+    </label>
+    <label>Port Number
+        <input placeholder="Port Number" type="number" step="1"
+          data-clear-btn="true" name="number-4" pattern="[0-9]*" id="number-4" value="" style="text-align: center;">
+    </label>
 		<a href="#login" class="ui-btn">Done</a>
 	</div><!-- /content -->
 
@@ -43,24 +50,29 @@
 <div data-role="page" id="login">
   <div data-role="panel" data-position="right" id="login_error">
     <!-- panel content goes here -->
-    <h2>jQuery Mobile is Cool!</h2>
+    <h2>Invalid user name or PIN</h2>
     <a href="#login" class="ui-btn" data-rel="close">Close</a>
   </div><!-- /panel -->
 
 	<div data-role="header"><h1>Login</h1></div><!-- /header -->
 
 	<div role="main" class="ui-content">
-		<!-- <a href="#login_error" class="ui-btn" >Open Panel</a> -->
-     <input placeholder="User" type="text" data-clear-btn="true" name="user" id="user" value="">
-     <input placeholder="PIN" type="number" data-clear-btn="true" name="pin" pattern="[0-9]*" id="pin" value="">
+    <label>User Name
+       <input placeholder="User" type="text" data-clear-btn="true" name="user" id="user" value="" style="text-align: center;">
+    </label>
+    <label>PIN
+     <input placeholder="PIN" type="number" data-clear-btn="true" name="pin" pattern="[0-9]*" id="pin" step="1" value="" style="text-align: center;">
+    </label>
     <label for="flip-checkbox-2">Auto-Login:</label>
     <input type="checkbox" data-role="flipswitch" name="flip-checkbox-2" id="flip-checkbox-2" data-on-text="Yes" data-off-text="No" data-wrapper-class="custom-label-flipswitch">
 
     <a href="#resource" class="ui-btn">Login</a>
+    <a href="#config" data-direction="reverse" class="ui-btn">Config</a>
 	</div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed">
     <a href="#config" data-direction="reverse" class="ui-btn">Config</a>
+    <a href="#login_error" class="ui-btn" >Login Error</a>
 	</div><!-- /footer -->
 </div><!-- /page -->
 </body>
