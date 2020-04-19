@@ -1,3 +1,22 @@
+/*
+I am using media queries to detect when the app is installed on a watch, 
+and set the styles accordingly 
+*/
+.t11-page {
+	background-color: black;
+	color: whitesmoke;
+}
+.t11-header {
+	background-color: darkblue;
+}
+.t11-footer {
+	background-color: darkblue;
+}
+.t11-content {
+	background-color: black;
+}
+
+/*  These are from Tizen Studio
 * {
     font-family: Verdana, Lucida Sans, Arial, Helvetica, sans-serif;
 }
@@ -20,4 +39,4 @@ body {
 	font-weight:bold;
 	font-size:5em;
 	color:#fff;
-}
+} */

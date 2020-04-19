@@ -1,6 +1,13 @@
 # T11 Job Watch - a Watch-Friendly Mobile Manufacturing Job Tracking Application for SAP B1
 
- ![Screen Navigation Sketch](t11jobwatchsketch.png)
+Hm, after my initial enthusiasm towards JQM, I found a number of quirks that make JQM as laborious to use as TAU.
+- Huge gaps are inserted between input fields, and I don't know how to remove them. It seems as if the space for a label is preserved even when I don't need the label
+- Labels are placed above fields.
+- When I tried my own CSS classes they were not applied consistently.
+
+The only thing I really like with JQM is the single-page approach with navigations between sections/pages.
+
+ ![Screen Navigation Sketch](./t11jobwatchsketch.png)
 
  ## How I initialized the project
 - npm init
