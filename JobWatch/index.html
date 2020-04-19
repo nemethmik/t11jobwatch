@@ -30,14 +30,15 @@
         <input type="radio" name="radio-choice-b" id="radio-choice-d" value="https">
         <label for="radio-choice-d">HTTPS</label>
     </fieldset>       
-    
-    <label>Server Name
-      <input placeholder="Server Name" type="text" data-clear-btn="true" name="text-3" id="text-3" style="text-align: center;">
-    </label>
-    <label>Port Number
-        <input placeholder="Port Number" type="number" step="1"
-          data-clear-btn="true" name="number-4" pattern="[0-9]*" id="number-4" value="" style="text-align: center;">
-    </label>
+      <label>Server Name
+        <input id="serverName" placeholder="Server Name" type="text" data-clear-btn="true" 
+          name="serverName" style="text-align: center;">
+      </label>
+      <label>Port Number
+      <input id="portNumber" placeholder="Port Number" type="number" step="1"
+          data-clear-btn="true" name="portNumber" pattern="[0-9]*" value="" 
+          style="text-align: center;">
+      </label>
 		<a href="#login" class="ui-btn">Done</a>
 	</div><!-- /content -->
 
