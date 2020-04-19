@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://yourdomain/JobWatch" version="1.0.0" viewmodes="fullscreen">
-    <tizen:application id="brzS7VFrfp.JobWatch" package="brzS7VFrfp" required_version="2.3.2"/>
-    <content src="index.html"/>
-    <feature name="http://tizen.org/feature/screen.size.normal"/>
-    <icon src="icon.png"/>
-    <name>JobWatch</name>
-    <tizen:profile name="wearable"/>
-</widget>
