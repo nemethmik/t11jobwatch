@@ -1,11 +1,8 @@
 # T11 Job Watch - a Watch-Friendly Mobile Manufacturing Job Tracking Application for SAP B1
 
-Hm, after my initial enthusiasm towards JQM, I found a number of quirks that make JQM as laborious to use as TAU.
-- Huge gaps are inserted between input fields, and I don't know how to remove them. It seems as if the space for a label is preserved even when I don't need the label
-- Labels are placed above fields.
-- When I tried my own CSS classes they were not applied consistently.
+My initial enthusiasm towards JQM is even higher, far the best UI technology for mobile even sub-mobile watch-friendly business application development.
 
-The only thing I really like with JQM is the single-page approach with navigations between sections/pages.
+The best thing I really like with JQM is the single-page approach with navigations between sections/pages.
 
  ![Screen Navigation Sketch](./t11jobwatchsketch.png)
 
@@ -19,3 +16,5 @@ The only thing I really like with JQM is the single-page approach with navigatio
   - I simply downloaded [JQM 1.4.5](http://jquerymobile.com/resources/download/jquery.mobile-1.4.5.zip) simply clicking on the button [Latest Stable](http://jquerymobile.com/resources/download/jquery.mobile-1.4.5.zip) on JQM home.
     - The zip package containeg jquery.mobile JS and CSS files. It had a demo folder with a number of examples and images, and most importantly the regular jquery JS package in **demos/js/jquery.js**
     - I simply copied the entire contents into the **JobWatch/jquery** folder. I see no reason to break this original structure. I fully respect the decision of the creators of this brilliant library.
+    - JQM doesn't work JQuery 3, but works fine with the 2016 released 2.2.4 and 1.12.4.
+- I included Andy Matthews [jQuery-Mobile-Icon-Pack](https://github.com/commadelimited/jQuery-Mobile-Icon-Pack), too, and I used the ellipsis-v icon as the "more" symbol. I even learnedhow to adjust the icon's centering.

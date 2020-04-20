@@ -1,80 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./commadelimited-jQuery-Mobile-Icon-Pack/dist/jqm-icon-pack-fa.css" />
   <link rel="stylesheet" href="./jquery/jquery.mobile-1.4.5.css">
   <!-- <link rel="stylesheet" href="./jquery/demos/_assets/css/jqm-demos.css"> -->
   <link rel="shortcut icon" href="./jquery/demos/favicon.ico">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<script src="./jquery/demos/js/jquery.js"></script>
+  <link rel="stylesheet" href="./css/style.css" />
+  <script src="./jquery/demos/js/jquery.js"></script>
+  <!-- <script src="./jquery/dist-2.2.4/jquery.min.js"></script> -->
   <script src="./jquery/demos/_assets/js/index.js"></script>
   <script>
-    $(document).on("mobileinit",function(){
+    $(document).on("mobileinit", function () {
       $.mobile.defaultPageTransition = "slide"
     })
   </script>
   <script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
-	<script src="./js/main.js"></script>
-  <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+  <script src="./js/main.js"></script>
+  <style>
+    /* Adjust the vertical three dots of this icon centered */
+    .ui-icon-ellipsis-v:after {
+      background-image: url("commadelimited-jQuery-Mobile-Icon-Pack/dist/png/ellipsis-v.png");
+      background-repeat: no-repeat;
+      /* background-position: 9px 3px; */
+      background-position-x: 9px;
+    }
+  </style>
   <title>Job Watch</title>
 </head>
+
 <body>
-  <!-- Start of CONFIG page -->
-<div data-role="page" id="config" data-theme="a">
-	<div data-role="header"><h1>Config</h1></div><!-- /header -->
-	<div class="ui-content">
-    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-        <input type="radio" name="radio-choice-b" id="radio-choice-c" value="http" checked="checked">
-        <label for="radio-choice-c">HTTP</label>
-        <input type="radio" name="radio-choice-b" id="radio-choice-d" value="https">
-        <label for="radio-choice-d">HTTPS</label>
-    </fieldset>       
-      <label>Server Name
-        <input id="serverName" placeholder="Server Name" type="text" data-clear-btn="true" 
-          name="serverName" style="text-align: center;">
-      </label>
-      <label>Port Number
-      <input id="portNumber" placeholder="Port Number" type="number" step="1"
-          data-clear-btn="true" name="portNumber" pattern="[0-9]*" value="" 
-          style="text-align: center;">
-      </label>
-		<a href="#login" class="ui-btn">Done</a>
-	</div><!-- /content -->
+  <!-- CONFIG -->
+  <div data-role="page" id="config" data-theme="b">
+    <div data-role="header">
+      <h1>Config</h1>
+    </div><!-- /header -->
+    <div class="ui-content">
+      <!-- contents -->
+      <div class="ui-grid-solo">
+        <div class="ui-block-a">
+          <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" style="text-align: center;">
+            <input type="radio" name="radio-choice-b" id="radio-choice-c" value="http" checked="checked">
+            <label for="radio-choice-c">HTTP</label>
+            <input type="radio" name="radio-choice-b" id="radio-choice-d" value="https">
+            <label for="radio-choice-d">HTTPS</label>
+          </fieldset>
+        </div>
+        <div class="ui-block-a">
+          <input id="hostName" placeholder="julika.villo.io" type="text" data-clear-btn="true" name="hostName"
+            value="botond-pc" style="text-align: center;">
+        </div>
+        <div class="ui-block-a">
+          <div class="ui-grid-a">
+            <div class="ui-block-a">
+              <input id="serviceName" placeholder="api" type="text" data-clear-btn="true" name="serviceName"
+                value="sqlbroker" style="text-align: center;">
+            </div>
+            <div class="ui-block-b">
+              <input id="portNumber" placeholder="99999" type="number" step="1" data-clear-btn="true" name="portNumber"
+                pattern="[0-9]*" value="60811" style="text-align: center;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="ui-grid-b">
+        <div class="ui-block-a">
+          <a href="#" class="ui-btn ui-btn-icon-left ui-icon-arrow-l ui-corner-all">Exit</a>
+        </div>
+        <div class="ui-block-b">
+          <a href="#login" class="ui-btn ui-btn-icon-left ui-icon-home ui-corner-all">Done</a>
+        </div>
+        <div class="ui-block-c">
+          <a href="#" class="ui-btn ui-btn-icon-left ui-icon-gear ui-corner-all">More</a>
+        </div>
+      </div> -->
+      <!-- <div data-role="controlgroup" data-type="horizontal" data-mini="true" style="text-align: center;">
+        <a href="#" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Exit</a>
+        <a href="#login" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+      </div> -->
+    </div><!-- /content -->
+    <div data-role="footer" data-position="fixed">
+      <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
+        <a href="#" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Exit</a>
+        <a href="#login" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+      </div>
+    </div><!-- /footer -->
+  </div><!-- /page -->
 
-	<div data-role="footer" data-position="fixed">
-		<a href="#login" class="ui-btn">Done</a>
-  </div><!-- /footer -->
-</div><!-- /page -->
+  <!-- LOGIN -->
+  <div data-role="page" id="login" data-theme="b">
+    <div data-role="panel" data-position="right" id="login_error">
+      <!-- panel content goes here -->
+      <h2>Invalid user name or PIN</h2>
+      <a href="#login" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
+    </div><!-- /panel -->
+    <div data-role="header">
+      <h1>Login</h1>
+    </div><!-- /header -->
+    <div role="main" class="ui-content">
+      <div class="ui-grid-solo">
+        <div class="ui-block-a">
+          <input placeholder="user" type="text" data-clear-btn="true" name="user" id="user" value="manager"
+            style="text-align: center;">
+        </div>
+        <div class="ui-block-a">
+          <input placeholder="1234" type="number" data-clear-btn="true" name="pin" pattern="[0-9]*" id="pin" step="1"
+            value="" style="text-align: center;">
+        </div>
+        <div class="ui-block-a">
+          <div class="ui-grid-a">
+            <div class="ui-block-a">
+              <p style="text-align: end; margin-right: 16px;">Auto-Login:</p>
+            </div>
+            <div class="ui-block-b">
+              <select name="slider-flip-m" id="slider-flip-m" data-role="slider" data-mini="true">
+                <option value="off">No</option>
+                <option value="on" selected="">Yes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="ui-block-a">
+          <div data-role="controlgroup" data-type="horizontal" data-mini="true" style="text-align: center;">
+            <a href="#config" data-direction="reverse"
+              class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Config</a>
+            <a href="#resource" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Login</a>
+            <a href="#login_error"
+              class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+          </div>
+        </div> -->
+      </div>
+    </div><!-- /content -->
+    <div data-role="footer" data-position="fixed">
+      <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
+        <a href="#config" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Config</a>
+        <a href="#resources" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Login</a>
+        <a href="#login_error"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+      </div>
+    </div><!-- /footer -->
+  </div><!-- /page -->
 
-<!-- Start of LOGIN page -->
-<div data-role="page" id="login">
-  <div data-role="panel" data-position="right" id="login_error">
-    <!-- panel content goes here -->
-    <h2>Invalid user name or PIN</h2>
-    <a href="#login" class="ui-btn" data-rel="close">Close</a>
-  </div><!-- /panel -->
+  <!-- RESOURCES -->
+  <div data-role="page" id="resources" data-theme="b">
+    <div data-role="header">
+      <h1>Resources</h1>
+    </div>
+    <div role="main" class="ui-content">
+      <ul data-role="listview" data-count-theme="b" data-filter="true" data-filter-placeholder="Search ..."
+        data-inset="true">
+        <li data-icon="gear"><a href="#">Cracker Painter<span class="ui-li-count">98</span></a></li>
+        <li data-icon="gear"><a href="#">Giga Crane BX5<span class="ui-li-count">41</span></a></li>
+        <li data-icon="user"><a href="#">Packagers<span class="ui-li-count">4</span></a></li>
+        <li data-icon="user"><a href="#">MC SEtup Specialist<span class="ui-li-count">12</span></a></li>
+        <li data-icon="star"><a href="#">Red Big Hammers <span class="ui-li-count">328</span></a></li>
+        <li data-icon="star"><a href="#">Trash Can Hanger <span class="ui-li-count">62</span></a></li>
+      </ul>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
+        <a href="#login" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Logout</a>
+        <a href="#startjob" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Jobs</a>
+        <a href="#login_error"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+      </div>
+    </div>
+  </div>
 
-	<div data-role="header"><h1>Login</h1></div><!-- /header -->
+  <!-- START JOB -->
+  <div data-role="page" id="startjob" data-theme="b">
+    <div data-role="panel" data-position="right" id="startjob_error">
+      <h2>No jobs to start</h2>
+      <a href="#startjob" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
+    </div><!-- /panel -->
+    <div data-role="header">
+      <h1>Jobs</h1>
+    </div>
+    <div role="main" class="ui-content">
+      <ul data-role="listview" data-filter="true" data-filter-placeholder="Search ..." data-inset="true">
+        <li data-role="list-divider">10/8/2020 Morning Shift<span class="ui-li-count">2</span></li>
+        <li data-icon="gear">
+          <a href="#runningjob">
+            <h2>Dry Hanging</h2><span class="ui-li-count">4500</span>
+            <p><strong>Red Bike BXP 75</strong></p>
+            <p class="ui-li-aside"><strong>35478-12 (6:24)</strong></p>
+          </a>
+        </li>
+        <li data-icon="gear">
+          <a href="#">
+            <h2>Dry Hanging (Rework)</h2><span class="ui-li-count">23700.5</span>
+            <p><strong>Boston Conference Fork</strong></p>
+            <p class="ui-li-aside"><strong>35611-1 (9:18)</strong></p>     
+          </a>
+        </li data-icon="gear">
+        <li data-role="list-divider">10/8/2020 Night Shift<span class="ui-li-count">1</span></li>
+        <li data-icon="gear">
+          <a href="#">
+            <h2>Avery Walking</h2><span class="ui-li-count">50550</span>
+            <p><strong>Dinner Tonight Kit BX 567</strong></p>
+            <p class="ui-li-aside"><strong>35534-8 19:48</strong></p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
+        <a href="#resources" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Resource</a>
+        <a href="#runningjob" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Start</a>
+        <a href="#login" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
+        <a href="#startjob_error"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-forbidden ui-btn-b">Hmm</a>
+      </div>
+    </div>
+  </div>
 
-	<div role="main" class="ui-content">
-    <label>User Name
-       <input placeholder="User" type="text" data-clear-btn="true" name="user" id="user" value="" style="text-align: center;">
-    </label>
-    <label>PIN
-     <input placeholder="PIN" type="number" data-clear-btn="true" name="pin" pattern="[0-9]*" id="pin" step="1" value="" style="text-align: center;">
-    </label>
-    <label for="flip-checkbox-2">Auto-Login:</label>
-    <input type="checkbox" data-role="flipswitch" name="flip-checkbox-2" id="flip-checkbox-2" data-on-text="Yes" data-off-text="No" data-wrapper-class="custom-label-flipswitch">
+  <!-- RUNNING JOB -->
+  <div data-role="page" id="runningjob" data-theme="b">
+    <div data-role="header">
+      <h1>Running Job</h1>
+    </div>
+    <div role="main" class="ui-content">
+      <div class="ui-grid-a">
+        <div class="ui-block-a">
+          <h2>Dry Hanging</h2><strong>[4500]</strong>
+          <p><strong>Red Bike BXP 75</strong></p>
+          <p class="ui-li-aside"><strong>35478-12 (6:24)</strong></p>
+        </div>
+        <div class="ui-block-b">
+          <div class="ui-grid-solo">
+            <div class="ui-block-a">
+              <h2>Started</h2>
+              <h2 id="starttime">08:05:23</h2>
+            </div>
+            <div class="ui-block-a">
+              <h2>Running</h2>
+              <h2 id="runningtime">02:15:52</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
+        <a href="#login" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
+        <a href="#completedquantities"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Stop</a>
+        <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+      </div>
+    </div>
+  </div>
 
-    <a href="#resource" class="ui-btn">Login</a>
-    <a href="#config" data-direction="reverse" class="ui-btn">Config</a>
-	</div><!-- /content -->
+  <!-- COMPLETED QUANTITIES -->
+  <div data-role="page" id="completedquantities" data-theme="b">
+    <div data-role="panel" data-position="right" id="completedquantities_error">
+      <h2>Invalid rejected quantity</h2>
+      <a href="#completedquantities" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+        data-rel="close">Close</a>
+    </div><!-- /panel -->
+    <div data-role="header">
+      <!-- /header -->
+      <h1>Quantities</h1>
+    </div>
+    <div role="main" class="ui-content">
+      <div class="ui-grid-a">
+        <div class="ui-block-a">
+          <p style="text-align: right; margin-right: 16px;">Completed Qty:</p>
+        </div>
+        <div class="ui-block-b">
+          <input placeholder="56000" type="number" data-clear-btn="true" id="completedqty" step="1" value=""
+            style="text-align: center;">
+        </div>
+        <div class="ui-block-a">
+          <p style="text-align: right; margin-right: 16px;">Rework Qty:</p>
+        </div>
+        <div class="ui-block-b">
+          <input placeholder="100" type="number" data-clear-btn="true" id="reworkqty" step="1" value=""
+            style="text-align: center;">
+        </div>
+        <div class="ui-block-a">
+          <p style="text-align: right; margin-right: 16px;">Rejected Qty:</p>
+        </div>
+        <div class="ui-block-b">
+          <div class="ui-grid-a">
+            <div class="ui-block-a">
+              <input placeholder="0" type="number" id="rejectedqty" step="1" value=""
+                style="text-align: center;"> <!-- data-clear-btn="true" -->
+            </div>
+            <div class="ui-block-b">
+              <input placeholder="0" type="number" data-clear-btn="true" id="rejqtydec" step="1" value=""
+                style="text-align: center;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
+        <a href="#runningjob" data-direction="reverse"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Cancel</a>
+        <a href="#resources" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a href="#completedquantities_error"
+          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+      </div>
+    </div><!-- /footer -->
+  </div><!-- /page -->
 
-	<div data-role="footer" data-position="fixed">
-    <a href="#config" data-direction="reverse" class="ui-btn">Config</a>
-    <a href="#login_error" class="ui-btn" >Login Error</a>
-	</div><!-- /footer -->
-</div><!-- /page -->
 </body>
+
 </html>

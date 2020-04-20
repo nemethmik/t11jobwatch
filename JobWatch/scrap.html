@@ -1,0 +1,50 @@
+<!-- Start of CONFIG page -->
+<div data-role="page" id="config" data-theme="b">
+  <div data-role="header">
+    <h1>Config</h1>
+  </div><!-- /header -->
+  <div class="ui-content">
+    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+      <input type="radio" name="radio-choice-b" id="radio-choice-c" value="http" checked="checked">
+      <label for="radio-choice-c">HTTP</label>
+      <input type="radio" name="radio-choice-b" id="radio-choice-d" value="https">
+      <label for="radio-choice-d">HTTPS</label>
+    </fieldset>      
+    <label>Host Name
+      <input id="hostName" placeholder="julika.villo.io" type="text" data-clear-btn="true" name="hostName"
+        value="botond-pc" style="text-align: center;">
+    </label>
+    <label>Service Name
+      <input id="serviceName" placeholder="api" type="text" data-clear-btn="true" name="serviceName" value="sqlbroker"
+        style="text-align: center;">
+    </label>
+    <label>Port Number
+      <input id="portNumber" placeholder="99999" type="number" step="1" data-clear-btn="true" name="portNumber"
+        pattern="[0-9]*" value="60811" style="text-align: center;">
+    </label>
+    <a href="#login" class="ui-btn">Done</a>
+  </div><!-- /content -->
+
+  <div data-role="footer" data-position="fixed">
+    <a href="#login" class="ui-btn">Done</a>
+  </div><!-- /footer -->
+</div><!-- /page -->
+
+<div data-role="footer" data-position="fixed">
+  <div class="ui-grid-d">
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b">
+      <a href="#" class="ui-btn ui-btn-icon-left ui-icon-arrow-l ui-corner-all">Exit</a>
+    </div>
+    <div class="ui-block-c">
+      <a href="#login" class="ui-btn ui-btn-icon-left ui-icon-home ui-corner-all">Done</a>
+    </div>
+    <div class="ui-block-d">
+      <a href="#" class="ui-btn ui-btn-icon-left ui-icon-gear ui-corner-all">More</a>
+    </div>
+    <!-- <a href="#" class="ui-block-b ui-btn ui-btn-icon-left ui-icon-arrow-l ui-corner-all">Exit</a>
+    <a href="#login" class="ui-block-c ui-btn ui-btn-icon-left ui-icon-home ui-corner-all">Done</a>
+    <a href="#" class="ui-block-d ui-btn ui-btn-icon-left ui-icon-gear ui-corner-all">More</a> -->
+    <div class="ui-block-e"></div>
+  </div>
+</div><!-- /footer -->

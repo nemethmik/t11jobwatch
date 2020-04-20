@@ -1,8 +1,39 @@
-/*
-I am using media queries to detect when the app is installed on a watch, 
-and set the styles accordingly 
+/* This is to position the three dots perfectly centered. 
+It simply doesn't work, so I had to include this directly in the HTML header.
 */
-.t11-page {
+/* .ui-icon-ellipsis-v:after {
+	background-image: url("../commadelimited-jQuery-Mobile-Icon-Pack/dist/png/ellipsis-v.png");
+	background-repeat: no-repeat;
+	background-position-x: 9px !important;
+	background-position-y: 3px !important;
+} */
+
+
+/*
+I was thinking of using media queries to detect when the app is installed on a watch, 
+and set the styles accordingly. 
+After my experimenting, the safest way is to stay away from this approach.
+It's better to use othet techniques, like ui-grid, ui-block and text-alighn:center in
+horizontal control groups. 
+*/
+/* for 320px screens */
+/* @media (min-width:20em) { 
+	.ui-field-contain {
+			min-height:2.5em;
+	}
+	.ui-field-contain > label {
+			position:absolute;
+			width:10em;
+	 }
+	.ui-field-contain > label ~ [class*=ui-] {
+			position:absolute;
+			right:0;
+			left:10em;
+			width:auto;
+	}
+} */
+
+/* .t11-page {
 	background-color: black;
 	color: whitesmoke;
 }
@@ -14,7 +45,7 @@ and set the styles accordingly
 }
 .t11-content {
 	background-color: black;
-}
+} */
 
 /*  These are from Tizen Studio
 * {
