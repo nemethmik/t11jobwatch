@@ -5,7 +5,8 @@
 	<meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport" />
 	<title>T11 Job Watch</title>
 	<link href="lib/tau/wearable/theme/default/tau.css" rel="stylesheet" />
-	<link href="lib/tau/wearable/theme/default/tau.circle.css" media="all and (-tizen-geometric-shape: circle)" rel="stylesheet" />
+	<link href="lib/tau/wearable/theme/default/tau.circle.css" media="all and (-tizen-geometric-shape: circle)"
+		rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 	<link href="css/style.circle.css" media="all and (-tizen-geometric-shape: circle)" rel="stylesheet" />
 	<script src="js/circle-helper.js"></script>
@@ -13,7 +14,7 @@
 </head>
 
 <body>
-	<div class="ui-page" id="welcome" >
+	<div class="ui-page" id="welcome">
 		<div class="ui-content">Welcome</div>
 		<div class="ui-footer ui-bottom-button">
 			<a href="#config" class="ui-btn">Conf</a>
@@ -22,12 +23,17 @@
 
 
 	<div class="ui-page" id="config">
-		<header class="ui-header-small" style="height:60px"><h2 class="ui-title">Config</h2></header>
+		<header class="ui-header-small" style="height:60px">
+			<h2 class="ui-title">Config</h2>
+		</header>
 		<div class="ui-content" style="background-color: blue;">
 			<input style="margin:4px;" id="name" name="name" placeholder="Server Name" type="text" />
-			<input style="margin:4px;" id="phonenumber" name="phonenumber" placeholder="Port Number" type="number" min="1" max="99999" step="1"/>
-			<label style="margin:4px;" for="check-test">https</label>
-			<input type="checkbox" name="mycheck" id="check-test" checked="checked"/>
+			<input style="margin:4px;" id="phonenumber" name="phonenumber" placeholder="Port Number" type="text" min="1"
+				max="99999" step="1" inputmode="numeric" />
+			<p>HTTPS
+				<!-- <label style="margin:4px;" for="check-test">https</label> -->
+				<input type="checkbox" name="mycheck" id="check-test" checked="checked" />
+			</p>
 		</div>
 		<footer class="ui-footer ui-bottom-button">
 			<button class="ui-btn">Done</button>
@@ -44,7 +50,7 @@
 				function init() {
 					nameWidget = tau.widget.TextInput(inputName);
 					phoneWidget = tau.widget.TextInput(inputPhone);
-					if(phoneWidget) console.log("Phone widget created")
+					if (phoneWidget) console.log("Phone widget created")
 					else console.log("Phone widget created")
 				}
 				// function destroy() {
