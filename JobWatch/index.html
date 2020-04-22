@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./commadelimited-jQuery-Mobile-Icon-Pack/dist/jqm-icon-pack-fa.css" />
   <link rel="stylesheet" href="./jquery/jquery.mobile-1.4.5.css">
+  <!-- <link rel="stylesheet" href="./jquery-mobile-1.5-2.0-rc1/css/themes/default/jquery.mobile.css"> -->
   <!-- <link rel="stylesheet" href="./jquery/demos/_assets/css/jqm-demos.css"> -->
   <link rel="shortcut icon" href="./jquery/demos/favicon.ico">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
@@ -14,12 +15,14 @@
   <!-- <script src="./jquery/dist-2.2.4/jquery.min.js"></script> -->
   <script src="./jquery/demos/_assets/js/index.js"></script>
   <script>
-    $(document).on("mobileinit", function () {
+    $(document).one("mobileinit", function () {
       $.mobile.defaultPageTransition = "slide"
     })
   </script>
   <script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
+  <!-- <script src="./jquery-mobile-1.5-2.0-rc1/js/jquery.mobile.js"></script> -->
   <script src="./js/main.js"></script>
+  <script src="./js/bundle.js"></script>
   <style>
     /* Adjust the vertical three dots of this icon centered */
     .ui-icon-ellipsis-v:after {
@@ -184,6 +187,7 @@
     </div><!-- /panel -->
     <div data-role="header">
       <h1>Jobs</h1>
+      <a href="#resource" data-icon="gear">Res</a>
     </div>
     <div role="main" class="ui-content">
       <ul data-role="listview" data-filter="true" data-filter-placeholder="Search ..." data-inset="true">

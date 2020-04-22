@@ -18,3 +18,11 @@ The best thing I really like with JQM is the single-page approach with navigatio
     - I simply copied the entire contents into the **JobWatch/jquery** folder. I see no reason to break this original structure. I fully respect the decision of the creators of this brilliant library.
     - JQM doesn't work JQuery 3, but works fine with the 2016 released 2.2.4 and 1.12.4.
 - I included Andy Matthews [jQuery-Mobile-Icon-Pack](https://github.com/commadelimited/jQuery-Mobile-Icon-Pack), too, and I used the ellipsis-v icon as the "more" symbol. I even learnedhow to adjust the icon's centering.
+- **npm install @types/jquery @types/jquerymobile**
+  - No need to install JQuery itself, only the type definitions are needed
+  - [TypeScript and libraries such as jQuery (with .d.ts files)](https://stackoverflow.com/questions/26540165/typescript-and-libraries-such-as-jquery-with-d-ts-files)
+  - I simply added two references to app.ts with leading triple slashes to the JQ and IQM type definitions, and everything worked great:
+    - ///&lt;reference path="../../node_modules/@types/jquery/index.d.ts"/>
+    - ///&lt;reference path="../../node_modules/@types/jquerymobile/index.d.ts"/>
+
+   
