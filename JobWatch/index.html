@@ -27,13 +27,23 @@
 			<h2 class="ui-title">Config</h2>
 		</header>
 		<div class="ui-content" style="background-color: blue;">
-			<input style="margin:4px;" id="name" name="name" placeholder="Server Name" type="text" />
-			<input style="margin:4px;" id="phonenumber" name="phonenumber" placeholder="Port Number" type="text" min="1"
-				max="99999" step="1" inputmode="numeric" />
-			<p>HTTPS
-				<!-- <label style="margin:4px;" for="check-test">https</label> -->
-				<input type="checkbox" name="mycheck" id="check-test" checked="checked" />
-			</p>
+			<ul class="ui-listview">
+				<li>
+					<input id="name" name="name" placeholder="Server Name" type="text" /></li>
+				<li>
+					<input id="phonenumber" name="phonenumber" placeholder="Port Number" type="text" min="1"
+						max="99999" step="1" inputmode="numeric" />
+				</li>
+				<li class="li-has-toggle">
+					<label> HTTPS
+						<div class="ui-toggleswitch">
+							<input class="ui-switch-input" type="checkbox" checked disabled />
+							<div class="ui-switch-button">
+							</div>
+						</div>
+					</label>
+				</li>
+			</ul>
 		</div>
 		<footer class="ui-footer ui-bottom-button">
 			<button class="ui-btn">Done</button>
