@@ -1,0 +1,32 @@
+{
+  "name": "t11jobwatch",
+  "version": "1.0.0",
+  "description": "Service Administration Mobile and Watch-friendly application",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemethmik/t11jobwatch.git"
+  },
+  "keywords": [
+    "Tizen",
+    "jQuery",
+    "Mobile",
+    "TypeScript"
+  ],
+  "author": "Miklos Nemeth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemethmik/t11jobwatch/issues"
+  },
+  "homepage": "https://github.com/nemethmik/t11jobwatch#readme",
+  "devDependencies": {
+    "@types/jquery": "^3.3.35",
+    "@types/jquerymobile": "^1.4.30",
+    "tsify": "^4.0.1",
+    "typescript": "^3.8.3",
+    "watchify": "^3.11.1"
+  }
+}
