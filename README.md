@@ -7,3 +7,6 @@ Project was initialized with
 - npm init
 - npm install typescript tsify watchify @types/jquery @types/jquerymobile --save-dev
 - Tizen Studio was used to create the actuall SvcAdmin project
+  - Tizen Studio created a gitignore in the workspace directory
+- The admin page is scripted with HTML5 and then styled with JQM
+
