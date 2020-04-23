@@ -4,7 +4,8 @@
   "description": "Service Administration Mobile and Watch-friendly application",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "watchify src/js/main.ts -v --debug -p tsify -o SvcAdmin/js/main.js"
   },
   "repository": {
     "type": "git",
