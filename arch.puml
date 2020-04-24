@@ -1,0 +1,45 @@
+@startuml SvcAdmin
+
+cloud {
+  [Firebase]
+}
+
+package "index.html" {
+  [adminSignIn]
+  [subscription]
+  [licenses]
+}
+
+package "applogic" {
+  [AppLogic] -- IAppLogic
+  [AppLogic] --> [DataStore]
+  [DataStore] -- IDataStore
+  [AppLogic] --> [DemoServiceAdminImpl]
+  [DemoServiceAdminImpl] -- IServiceAdmin
+  [FirebaseImpl] -- IServiceAdmin
+  [AppLogic] --> [FirebaseImpl]
+  [FirebaseImpl] ..> [Firebase]
+}
+
+package "controllers" {
+  [AdminSignInPageController] -- IAdminSignInPageController
+  [SubscriptionPageController] -- ISubscriptionPageController
+  [AdminSignInPageController] .u.> IAppLogic
+  [SubscriptionPageController] .u.> IAppLogic
+  [AdminSignInPageController] .u.> IDataStore
+  [AdminSignInPageController] .u.> IServiceAdmin
+}
+
+package "Pages" {
+  [PageUI<CTR>] <|-- [AdminSignInPageUI]
+  [AdminSignInPageUI] -u- IAdminSignInPageUI
+  [AdminSignInPageUI] .d.> [adminSignIn]
+  [AdminSignInPageUI] .u.> IAdminSignInPageController
+  [PageUI<CTR>] <|-- [SubscriptionPageUI]
+  [SubscriptionPageUI] -u- ISubscriptionPageUI
+  [SubscriptionPageUI] .d.> [subscription]
+  [SubscriptionPageUI] .u.> ISubscriptionPageController
+  [AdminSignInPageController] ..> IAdminSignInPageUI
+  [SubscriptionPageController] ..> ISubscriptionPageUI
+}
+@enduml
