@@ -1,6 +1,8 @@
 import { IAppData, IDataStore, IAppLogic, IServiceAdmin, ISubscriptionDetails } from "./interfaces"
 import { AdminSignInPageController, SubscriptionPageController } from "./controllers"
 import { AdminSignInPageUI, SubscriptionPageUI } from "./pages"
+// import themeChanger from "./themechanger"
+
 const STOREKEY = "AppData"
 class DataStore implements IDataStore {
   saveSubscriptionNumberAndPIN(subscriptionNumber?: string, pin?: string) {
@@ -42,12 +44,14 @@ export class AppLogic implements IAppLogic {
   dataStore: IDataStore = new DataStore()
   serviceAdminApi: IServiceAdmin = new DemoServiceAdminImpl()
   subscriptionDetails: ISubscriptionDetails = {}
+  theme:string = "b"
   constructor() {
     this.initTizenHWKeyHandler(this)
     $(document).on("pageinit", (e) => this.onPageInit(e))
   }
   onPageInit(e: JQuery.TriggeredEvent<Document, undefined, Document, Document>) {
     if (e.target instanceof HTMLElement) {
+      // themeChanger(this.theme)
       switch (e.target.id) {
         case "adminSignIn":
           new AdminSignInPageUI(e.target, new AdminSignInPageController(this))

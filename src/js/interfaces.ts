@@ -1,6 +1,7 @@
 export interface IAppData {
   subscriptionNumber?:string,
   pin?:string,
+  theme?:string,
 }
 export interface IDataStore {
   saveSubscriptionNumberAndPIN(subscriptionNumber?:string,pin?:string):void,
@@ -12,6 +13,7 @@ export interface IAppLogic {
   serviceAdminApi:IServiceAdmin,
   subscriptionDetails:ISubscriptionDetails,
   areWeOnTizen:boolean,
+  theme:string,
   exitApp():void,
 }
 
@@ -23,6 +25,7 @@ export interface IAdminSignInPageController extends IController<IAdminSignInPage
   onSignIn(subscriptionNumber?: string, pin?: string): boolean,
   onPageShow():void,
   onExit():void,
+  onTheme(th:string):void,
 }
 export interface IAdminSignInPageUI extends IPageUI {
   setSubscriptionNumber(n:string):void,

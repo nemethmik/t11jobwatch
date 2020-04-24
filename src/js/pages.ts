@@ -30,6 +30,9 @@ export class AdminSignInPageUI extends PageUI<IAdminSignInPageController>  imple
       //e.preventDefault() // This is another way to block default HTML handling
       return this.ctrl.onExit() 
     })
+    $("#themeA").on("click", () => {this.ctrl.onTheme("a")})
+    $("#themeB").on("click", () => {this.ctrl.onTheme("b")})
+    $("#themeC").on("click", () => {this.ctrl.onTheme("c")})
     console.log("AdminSignInPageUI constructed")
   }
   setSubscriptionNumber(n:string) {

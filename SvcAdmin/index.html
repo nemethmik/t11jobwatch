@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="description" content="Service Admin Web/Mobile Application"/>
-    <link rel="stylesheet" href="./jquery/jquery.mobile-1.4.5.css">
-    <script src="./jquery/demos/js/jquery.js"></script>
-    <script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
-    <script src="./js/main.js"></script>
-    <title>Service Admin</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="Service Admin Web/Mobile Application" />
+  <link rel="stylesheet" href="./jquery-mobile-theme-125514-0/themes/t11kids.css" />
+  <link rel="stylesheet" href="./jquery-mobile-theme-125514-0/themes/jquery.mobile.icons.min.css"/>
+  <!-- <link rel="stylesheet" href="./jquery/jquery.mobile.theme-1.4.5.css"> -->
+  <!-- <link rel="stylesheet" href="./jquery/jquery.mobile.icons-1.4.5.css" /> -->
+  <link rel="stylesheet" href="./jquery/jquery.mobile.structure-1.4.5.css" />
+  <!-- <link rel="stylesheet" href="./jquery/jquery.mobile-1.4.5.css"> -->
+  <script src="./jquery/demos/js/jquery.js"></script>
+  <script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
+  <script src="./js/main.js"></script>
+  <title>Service Admin</title>
 
 </head>
 <section data-role="page" id="adminSignIn" data-theme="b">
@@ -16,14 +22,22 @@
     <p id="adminSignInMessage">Sign in Error</p>
     <a href="#adminSignIn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
   </div>
-  <header data-role="header"><h1>Admin Sign In</h1></header>
+  <header data-role="header">
+    <h1>Admin Sign In</h1>
+  </header>
   <main data-role="content">
     <p style="text-align: center;">Subscription:
-      <input id="subscriptionNumber" data-clear-btn="true" style="text-align: center;" placeholder="99999" type="number" min="1" step="1">
+      <input id="subscriptionNumber" data-clear-btn="true" style="text-align: center;" placeholder="99999" type="number"
+        min="1" step="1">
     </p>
     <p style="text-align: center;">PIN:
       <input id="pin" data-clear-btn="true" style="text-align: center;" type="number" placeholder="9999" step="1">
     </p>
+    <fieldset data-role="controlgroup" data-type="horizontal" style="text-align: center;" data-mini="true">
+      <a href="#" data-role="button" data-theme="a" id="themeA">A</a>
+      <a href="#" data-role="button" id="themeB" data-theme="b">B</a>
+      <a href="#" data-role="button" id="themeC" data-theme="c">C</a>
+    </fieldset>
   </main>
   <footer data-role="footer" data-position="fixed">
     <fieldset style="text-align: center;">
@@ -35,29 +49,39 @@
 </section>
 
 <section data-role="page" id="subscription" data-theme="b">
-<header data-role="header"><h1>Subscription</h1></header>
-<main data-role="content">
-  <ul data-role="listview" data-inset="true">
-    <li><a href="#licenses" data-transition="slide" >Licenses <span id="numberOflicenses" class="ui-li-count">12</span></a></li>
-    <li><a href="#users" data-transition="slide" >Users <span id="numberOfUsers" class="ui-li-count">8</span></a></li>
-    <li><a href="#profiles" data-transition="slide" >Profiles <span id="numberOfProfiles" class="ui-li-count">3</span></a></li>
-  </ul>
-</main>
-<footer data-role="footer" data-position="fixed">
-  <fieldset style="text-align: center;">
-    <a href="#adminSignIn" data-transition="slide" data-direction="reverse" data-role="button" data-icon="arrow-l">Sign Out</a>
-  </fieldset>
-</footer>
+  <header data-role="header">
+    <h1>Subscription</h1>
+  </header>
+  <main data-role="content">
+    <ul data-role="listview" data-inset="true">
+      <li><a href="#licenses" data-transition="slide">Licenses <span id="numberOflicenses"
+            class="ui-li-count">12</span></a></li>
+      <li><a href="#users" data-transition="slide">Users <span id="numberOfUsers" class="ui-li-count">8</span></a></li>
+      <li><a href="#profiles" data-transition="slide">Profiles <span id="numberOfProfiles"
+            class="ui-li-count">3</span></a></li>
+    </ul>
+  </main>
+  <footer data-role="footer" data-position="fixed">
+    <fieldset style="text-align: center;">
+      <a href="#adminSignIn" data-transition="slide" data-direction="reverse" data-role="button"
+        data-icon="arrow-l">Sign Out</a>
+    </fieldset>
+  </footer>
 </section>
 
 <section data-role="page" id="licenses" data-theme="b">
-  <header data-role="header"><h1>Licenses</h1></header>
+  <header data-role="header">
+    <h1>Licenses</h1>
+  </header>
   <footer data-role="footer" data-position="fixed">
     <fieldset style="text-align: center;">
-      <a href="#subscription" data-transition="slide" data-direction="reverse" data-role="button" data-icon="arrow-l">Submit</a>
+      <a href="#subscription" data-transition="slide" data-direction="reverse" data-role="button"
+        data-icon="arrow-l">Submit</a>
     </fieldset>
   </footer>
-  </section>
+</section>
+
 <body>
 </body>
+
 </html>
