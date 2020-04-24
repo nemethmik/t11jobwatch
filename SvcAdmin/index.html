@@ -12,20 +12,24 @@
 
 </head>
 <section data-role="page" id="adminSignIn" data-theme="b">
+  <div data-role="panel" data-position="right" id="adminSignInPanel">
+    <p id="adminSignInMessage">Sign in Error</p>
+    <a href="#adminSignIn" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
+  </div>
   <header data-role="header"><h1>Admin Sign In</h1></header>
   <main data-role="content">
     <p style="text-align: center;">Subscription:
-      <input data-clear-btn="true" style="text-align: center;" placeholder="99999" type="number" min="1" step="1">
+      <input id="subscriptionNumber" data-clear-btn="true" style="text-align: center;" placeholder="99999" type="number" min="1" step="1">
     </p>
     <p style="text-align: center;">PIN:
-      <input data-clear-btn="true" style="text-align: center;" type="number" placeholder="9999" step="1">
+      <input id="pin" data-clear-btn="true" style="text-align: center;" type="number" placeholder="9999" step="1">
     </p>
   </main>
   <footer data-role="footer" data-position="fixed">
     <fieldset style="text-align: center;">
-      <a href="#exit" data-role="button" >Exit</a>
-      <a href="#subscription" data-transition="slide" data-role="button">Sign In</a>
-      <a href="#userLogin" data-role="button">User</a>
+      <a href="#exit" data-role="button" id="exit">Exit</a>
+      <a href="#subscription" data-transition="slide" data-role="button" id="signIn">Sign In</a>
+      <a href="#adminSignInPanel" data-role="button">User</a>
     </fieldset>
   </footer>
 </section>
@@ -34,9 +38,9 @@
 <header data-role="header"><h1>Subscription</h1></header>
 <main data-role="content">
   <ul data-role="listview" data-inset="true">
-    <li><a href="#licenses" data-transition="slide" >Licenses <span class="ui-li-count">12</span></a></li>
-    <li><a href="#users" data-transition="slide" >Users <span class="ui-li-count">8</span></a></li>
-    <li><a href="#profiles" data-transition="slide" >Profiles <span class="ui-li-count">3</span></a></li>
+    <li><a href="#licenses" data-transition="slide" >Licenses <span id="numberOflicenses" class="ui-li-count">12</span></a></li>
+    <li><a href="#users" data-transition="slide" >Users <span id="numberOfUsers" class="ui-li-count">8</span></a></li>
+    <li><a href="#profiles" data-transition="slide" >Profiles <span id="numberOfProfiles" class="ui-li-count">3</span></a></li>
   </ul>
 </main>
 <footer data-role="footer" data-position="fixed">
@@ -48,7 +52,12 @@
 
 <section data-role="page" id="licenses" data-theme="b">
   <header data-role="header"><h1>Licenses</h1></header>
-</section>
+  <footer data-role="footer" data-position="fixed">
+    <fieldset style="text-align: center;">
+      <a href="#subscription" data-transition="slide" data-direction="reverse" data-role="button" data-icon="arrow-l">Submit</a>
+    </fieldset>
+  </footer>
+  </section>
 <body>
 </body>
 </html>
