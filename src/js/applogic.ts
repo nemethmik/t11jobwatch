@@ -1,6 +1,7 @@
+import {sleepAsync} from "./utils"
 import { IAppData, IDataStore, IAppLogic, IServiceAdmin, ISubscriptionDetails } from "./interfaces"
-import { AdminSignInPageController, SubscriptionPageController } from "./controllers"
-import { AdminSignInPageUI, SubscriptionPageUI } from "./pages"
+import { AdminSignInPageController, SubscriptionPageController, UsersPageController } from "./controllers"
+import { AdminSignInPageUI, SubscriptionPageUI, UsersPageUI, } from "./pages"
 // import themeChanger from "./themechanger"
 
 const STOREKEY = "AppData"
@@ -44,20 +45,35 @@ export class AppLogic implements IAppLogic {
   dataStore: IDataStore = new DataStore()
   serviceAdminApi: IServiceAdmin = new DemoServiceAdminImpl()
   subscriptionDetails: ISubscriptionDetails = {}
-  theme:string = "b"
+  theme: string = "b"
   constructor() {
     this.initTizenHWKeyHandler(this)
     $(document).on("pageinit", (e) => this.onPageInit(e))
+    //see https://api.jquerymobile.com/1.4/pagebeforeshow/ It is deprecated and not available in 1.5
+    $(document).on("pagebeforeshow", (e) => this.onPageShow(e))
+  }
+  onPageShow(e: JQuery.TriggeredEvent<Document, undefined, Document, Document>) {
+    if (e.target instanceof HTMLElement) {
+      const pg = $("#" + e.target.id)
+      //@ts-ignore
+      if (pg.page("option", "theme") != this.theme) {
+        //@ts-ignore //TODO Page theme color swatch is set automatically, see https://api.jquerymobile.com/1.4/page/#option-theme
+        pg.page("option", "theme", this.theme)
+      }
+    }
   }
   onPageInit(e: JQuery.TriggeredEvent<Document, undefined, Document, Document>) {
     if (e.target instanceof HTMLElement) {
-      // themeChanger(this.theme)
       switch (e.target.id) {
         case "adminSignIn":
           new AdminSignInPageUI(e.target, new AdminSignInPageController(this))
           break
         case "subscription":
           new SubscriptionPageUI(e.target, new SubscriptionPageController(this))
+          break
+        case "users":
+          new UsersPageUI(e.target, new UsersPageController(this))
+          break
       }
     }
   }
@@ -81,6 +97,12 @@ export class AppLogic implements IAppLogic {
       });
     }
   }
+  get userToBeDeleted():string | null {
+    return sessionStorage.getItem("userToBeDeleted")
+  }
+  set userToBeDeleted(u:string | null) {
+    if(u) sessionStorage.setItem("userToBeDeleted",u)
+  }
 }
 
 class DemoServiceAdminImpl implements IServiceAdmin {
@@ -92,9 +114,24 @@ class DemoServiceAdminImpl implements IServiceAdmin {
       { name: "Prod", https: false, hostName: "botond-pc", apiName: "api", portNumber: 56000, companyDB: "SBODemoUS", diApiUser: "manager", diUserPassword: "123" },
     ]
   }
-  signIn(subscriptionNumber: string, pin: string): ISubscriptionDetails {
+  async deleteUserAsync(user:string):Promise<ISubscriptionDetails>{
+    if(this.data.users) this.data.users = this.data.users.filter((e) => e != user)
+    await sleepAsync(2000)
+    return this.data
+  }
+
+  async signInAsync(subscriptionNumber: string, pin: string): Promise<ISubscriptionDetails> {
     if (subscriptionNumber.includes("9") && pin) {
-      return this.data
+      //HTTPS doesn't work on emulator :(, at least not on Mac, but works fine on real device 
+      const url = "https://reqres.in/api/users?delay=3"
+      try {
+        const r = await $.ajax({ method: "GET", url })
+        //TODO This is an in-line type definition for fun
+        this.data.users = r.data.map((e: { last_name: string }) => e.last_name)
+        return this.data          
+      } catch (error) {
+        return { error: { errorCode: error.status, errorText: `Ajax error ${error.statusText} for URL ${url}` } }        
+      }
     } else {
       return { error: { errorCode: 1001, errorText: `Invalid subscription number ${subscriptionNumber} Has no digit 9 or no PIN` } }
     }

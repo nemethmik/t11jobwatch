@@ -1,8 +1,8 @@
 import {
   IAppData, IAdminSignInPageUI, IAdminSignInPageController, IAppLogic,
-  ISubscriptioPageController, ISubscriptionPageUI
+  ISubscriptioPageController, ISubscriptionPageUI,
+  IUsersPageController, IUsersPageUI,
 } from "./interfaces"
-import themeChanger from "./themechanger"
 export class Controller<UI> {
   readonly al: IAppLogic
   constructor(al: IAppLogic) { this.al = al }
@@ -16,10 +16,10 @@ export class AdminSignInPageController extends Controller<IAdminSignInPageUI> im
   onExit(): void {
     this.al.exitApp()
   }
-  onSignIn(subscriptionNumber?: string, pin?: string): boolean {
+  async onSignInAsync(subscriptionNumber?: string, pin?: string): Promise<boolean> {
     this.al.dataStore.saveSubscriptionNumberAndPIN(subscriptionNumber, pin)
     if (subscriptionNumber && pin) {
-      this.al.subscriptionDetails = this.al.serviceAdminApi.signIn(subscriptionNumber, pin)
+      this.al.subscriptionDetails = await this.al.serviceAdminApi.signInAsync(subscriptionNumber, pin)
       if (this.al.subscriptionDetails.error) {
         this.ui.showMessageOnPanel(this.al.subscriptionDetails.error.errorText)
         return false
@@ -41,7 +41,7 @@ export class AdminSignInPageController extends Controller<IAdminSignInPageUI> im
   }
   onTheme(th: string): void {
     this.al.theme = th
-    themeChanger(th)
+    this.ui.setTheme(th)
   }
 }
 
@@ -50,6 +50,21 @@ export class SubscriptionPageController extends Controller<ISubscriptionPageUI> 
   onPageShow() {
     this.ui.showSubscriptionDetails(this.al.subscriptionDetails)
     console.log("Subscription Page shown")
-    themeChanger(this.al.theme)
+  }
+}
+
+export class UsersPageController extends Controller<IUsersPageUI> implements IUsersPageController {
+  constructor(al: IAppLogic) { super(al) }
+  onPageShow() {
+    this.ui.showUsers(this.al.subscriptionDetails.users)
+  }
+  onDeleteUserClicked(user:string):void {
+    this.al.userToBeDeleted = user
+    this.ui.showDeleteUserConfirmation(user)
+  }
+  //@ts-ignore //TODO To implement user deletion
+  async onDeleteUserConfirmedAsync(user:string){
+    const details = await this.al.serviceAdminApi.deleteUserAsync(user)
+    this.ui.showUsers(details.users) //To show the results of the deletion or other intermittent database changes
   }
 }

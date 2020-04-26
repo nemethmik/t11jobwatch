@@ -1,0 +1,97 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./jquery-mobile-theme-125514-0/themes/t11kids.css" />
+  <link rel="stylesheet" href="./jquery-mobile-theme-125514-0/themes/jquery.mobile.icons.min.css" />
+  <link rel="stylesheet" href="./jquery/jquery.mobile.structure-1.4.5.css" />
+  <link rel="shortcut icon" href="./jquery/demos/favicon.ico">
+  <script src="./jquery/demos/js/jquery.js"></script>
+  <script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
+  <title>Users</title>
+</head>
+
+<body>
+  <section data-role="page" id="users" data-theme="b">
+    <div data-role="popup" id="deleteUser" data-overlay-theme="b" data-theme="b" data-dismissible="false"
+      style="max-width:400px;">
+      <div data-role="header" data-theme="a">
+        <h1>Delete User?</h1>
+      </div>
+      <div role="main" class="ui-content">
+        <h3 class="ui-title">Are you sure you want to delete user <span id="userToDelete"></span> ?</h3>
+        <p>This action cannot be undone.</p>
+        <a href="#users" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
+        <a href="#" id="userDeletionConfirmed" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back"
+          data-transition="flow">Delete</a>
+      </div>
+    </div>
+    <header data-role="header">
+      <h1>Users</h1>
+    </header>
+    <main data-role="content">
+      <ul data-role="listview" id="userList" data-inset="true">
+        <li data-icon="delete"><a href="#deleteUser" data-rel="popup" data-position-to="window" data-transition="pop"
+            data-user-id="villo">villo</a>
+        </li>
+        <li data-icon="delete"><a href="#deleteUser" data-rel="popup" data-position-to="window"
+            data-transition="pop">julika</a>
+        </li>
+        <li data-icon="delete"><a href="#deleteUser" data-rel="popup" data-position-to="window"
+            data-transition="pop">otto</a>
+        </li>
+      </ul>
+    </main>
+    <footer data-role="footer" data-position="fixed">
+      <fieldset style="text-align: center;">
+        <a href="#subscription" data-role="button" data-transition="slide" data-direction="reverse"
+          data-icon="arrow-l">Back</a>
+        <a href="#addNewUser" data-role="button" data-icon="user">New</a>
+      </fieldset>
+    </footer>
+    <script>
+      // $(document).on("pageshow", async function (e) {
+      //   if (e.target.id === "users") {
+      //     //     $("#" + e.target.id).page( "option", "theme", "a" )
+          //     console.log("Theme set to a",e.target)
+          // This injects the users into an UL, 
+          // no need to call refresh at the end when the page is not initialized
+          // but it MUST be called when the page has already been initialized
+          // $.mobile.loading("show", {text: "Loading...", textVisible: true, theme: "b",});
+          // const r = await $.ajax({ method: "GET", url: "https://reqres.in/api/users?delay=3" })
+          // // console.log(r)
+          // renderUserList(r.data.map((e)=>e.last_name))
+          // $.mobile.loading("hide")
+          
+
+          // $.ajax({ method: "GET", url: "https://reqres.in/api/users?delay=3" }).done((r) => {
+          //   // console.log(r)
+          //   renderUserList(r.data.map((e)=>e.last_name))
+          //   $.mobile.loading("hide")
+          // })
+          // const users = ["anna", "otto", "john"]
+          //renderUserList(users)
+      //     function renderUserList(users) {
+      //       const userList = users.reduce((a, u) => a += `
+      //       <li data-icon="delete"><a href="#deleteUser" data-rel="popup" data-position-to="window" data-transition="pop"
+      //             data-user-id="${u}">${u}</a>
+      //       </li>      
+      //       `, "")
+      //       $("#userList").html(userList).listview("refresh")
+      //     }
+      //   }
+      // })
+
+      // This is to pass the selected user to the confirmation dialog/popup
+      // It would be better to use **sessionStorage**
+      // $("#userList").on("click", function (e) {
+      //   console.log("user list click for ", e)
+      //   // $("#userToDelete").text(e.target.text)
+      //   $("#userToDelete").text(e.target.dataset.userId)
+      // })
+    </script>
+  </section>
+</body>
+
+</html>
