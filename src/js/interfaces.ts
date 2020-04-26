@@ -23,7 +23,7 @@ export interface IController<UI> {
   readonly al: IAppLogic,
 }
 export interface IPageUI {
-  setTheme(theme:string):void,
+  changeTheme(theme:string):void,
 }
 export interface IAdminSignInPageController extends IController<IAdminSignInPageUI> {
   onSignInAsync(subscriptionNumber?: string, pin?: string): Promise<boolean>,

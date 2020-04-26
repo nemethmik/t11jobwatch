@@ -1,4 +1,5 @@
 import {sleepAsync} from "./utils"
+import {updateThemeOnActivePage} from "./themechanger"
 import { IAppData, IDataStore, IAppLogic, IServiceAdmin, ISubscriptionDetails } from "./interfaces"
 import { AdminSignInPageController, SubscriptionPageController, UsersPageController } from "./controllers"
 import { AdminSignInPageUI, SubscriptionPageUI, UsersPageUI, } from "./pages"
@@ -54,12 +55,7 @@ export class AppLogic implements IAppLogic {
   }
   onPageShow(e: JQuery.TriggeredEvent<Document, undefined, Document, Document>) {
     if (e.target instanceof HTMLElement) {
-      const pg = $("#" + e.target.id)
-      //@ts-ignore
-      if (pg.page("option", "theme") != this.theme) {
-        //@ts-ignore //TODO Page theme color swatch is set automatically, see https://api.jquerymobile.com/1.4/page/#option-theme
-        pg.page("option", "theme", this.theme)
-      }
+      updateThemeOnActivePage(this.theme)
     }
   }
   onPageInit(e: JQuery.TriggeredEvent<Document, undefined, Document, Document>) {

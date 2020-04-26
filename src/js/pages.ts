@@ -1,5 +1,6 @@
 import {openJQMPanel, changePage,
   setHTMLElementText, getHTMLElementVal, setHTMLElementVal, } from "./utils"
+import {updateThemeOnActivePage} from "./themechanger"
 import {
   IAdminSignInPageUI, IAdminSignInPageController, IController, IPageUI,
   ISubscriptionDetails, ISubscriptionPageUI, ISubscriptioPageController,
@@ -16,9 +17,10 @@ export class PageUI<CTR extends IController<IPageUI>> implements IPageUI {
     this._ctrl = ctrl
     this._ctrl.ui = this // This is terribly important to pass the UI object to the controller
   }
-  setTheme(theme: string) {
-    //@ts-ignore //TODO see https://api.jquerymobile.com/1.4/page/#option-theme
-    $("#" + this.page.id).page("option", "theme", theme)
+  changeTheme(theme: string) {
+    //ts-ignore //TODO see https://api.jquerymobile.com/1.4/page/#option-theme
+    // $("#" + this.page.id).page("option", "theme", theme)
+    updateThemeOnActivePage(theme)
   }
   showLoadingIndicator() {
     $.mobile.loading("show", { text: "Loading...", textVisible: true, theme: "b", });

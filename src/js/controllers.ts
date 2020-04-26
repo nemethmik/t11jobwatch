@@ -37,11 +37,11 @@ export class AdminSignInPageController extends Controller<IAdminSignInPageUI> im
     // Retrieve saved subscription number and PIN from local store
     if (appData.subscriptionNumber) this.ui.setSubscriptionNumber(appData.subscriptionNumber)
     if (!this.al.areWeOnTizen) this.ui.hideExit()
-    console.log("Admin SignIn Page shown")
+    // console.log("Admin SignIn Page shown")
   }
   onTheme(th: string): void {
     this.al.theme = th
-    this.ui.setTheme(th)
+    this.ui.changeTheme(th)
   }
 }
 
