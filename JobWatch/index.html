@@ -19,7 +19,7 @@
     })
   </script>
   <script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
-  <!-- <script src="./js/main.js"></script> -->
+  <script src="./js/main.js"></script>
   <!-- <script src="./js/bundle.js"></script> -->
   <style>
     /* Adjust the vertical three dots of this icon centered */
@@ -35,49 +35,47 @@
 
 <body>
   <!-- CONFIG -->
-  <section data-role="page" id="config" data-theme="b">
-    <div data-role="panel" data-position="right" id="config_error">
-      <!-- panel content goes here -->
-      <h2 id="config_error_text">Cannot Connect to Server</h2>
-      <a href="#config" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
-    </div><!-- /panel -->
+  <section data-role="page" id="configPage" data-theme="b">
+    <div data-role="panel" data-position="right" id="configErrorPanel">
+      <p id="configErrorDisplayText">Cannot Connect to Server</p>
+      <a href="#configPage" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
+    </div>
     <header data-role="header">
       <h1>Config</h1>
     </header>
     <main class="ui-content">
-      <!-- contents -->
       <div class="ui-grid-solo">
         <div class="ui-block-a">
           <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" style="text-align: center;">
-            <input type="radio" name="http" id="httpOption" value="http" checked="checked">
-            <label for="httpOption">HTTP</label>
-            <input type="radio" name="http" id="httpsOption" value="https">
-            <label for="httpsOption">HTTPS</label>
+            <input type="radio" name="http" id="httpInputRadio" value="http" checked="checked">
+            <label for="httpInputRadio">HTTP</label>
+            <input type="radio" name="http" id="httpsInputRadio" value="https">
+            <label for="httpsInputRadio">HTTPS</label>
           </fieldset>
         </div>
         <div class="ui-block-a">
-          <input id="hostName" placeholder="julika.villo.io" type="text" data-clear-btn="true" name="hostName"
+          <input id="hostNameInputText" placeholder="julika.villo.io" type="text" data-clear-btn="true" name="hostNameInputText"
             value="MIKISURFACE" style="text-align: center;">
         </div>
         <div class="ui-block-a">
           <div class="ui-grid-a">
             <div class="ui-block-a">
-              <input id="serviceName" placeholder="api" type="text" data-clear-btn="true" name="serviceName"
+              <input id="serviceNameInputText" placeholder="api" type="text" data-clear-btn="true" name="serviceNameInputText"
                 value="t11sqlbroker" style="text-align: center;">
             </div>
             <div class="ui-block-b">
-              <input id="portNumber" placeholder="99999" type="number" step="1" data-clear-btn="true" name="portNumber"
+              <input id="portInputNumber" placeholder="99999" type="number" step="1" data-clear-btn="true" name="portInputNumber"
                 pattern="[0-9]*" value="80" style="text-align: center;">
             </div>
           </div>
         </div>
       </div>
-    </main><!-- /content -->
+    </main>
     <footer data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
         <a href="#" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Exit</a>
-        <a id="doneButton" href="#login" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a id="doneButton" href="#loginPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
         <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
     </footer>
@@ -85,75 +83,45 @@
       //console.log("Reloaded on " + Date.now())
       //pageinit event is only JQuery event
       $(document).one("pageinit", async e => {
-        if(e.target.id === "config") {
+        if(e.target.id === "configPage") {
           doneButton.addEventListener("click", async e => {
             e.preventDefault()
-            saveServiceURLToLocalStore()
+            saveServiceURLToLocalStore(httpInputRadio.checked,hostNameInputText.value,portInputNumber.value,serviceNameInputText.value)
             try {
-              let response = await SQLBroker("select top 1 ItemCode from OITM")
+              // let response = await SQLBroker("select top 1 ItemCode from OITM")
+              let response = await userQuery("TestConnection")
               //console.log(response.data[0].ItemCode)
-              //config_error_text.textContent = response.data[0].ItemCode
-              $.mobile.changePage("#login")
+              //configErrorDisplayText.textContent = response.data[0].ItemCode
+              $.mobile.changePage("#loginPage")
             } catch(error) {
-                config_error_text.textContent = error.responseJSON.errorText
-                $("#config_error").panel("open")
-                console.log(error);
-              }
+              const msg = textFrom(error)
+              configErrorDisplayText.textContent = msg ? msg : "Empty"
+              $("#configErrorPanel").panel("open")
+              console.log(error);
             }
-          )
+          })
         }
       })
-      function showLoadingIndicator(text = "Loading ...") {
-        $.mobile.loading("show", {text, textVisible:true,theme:"b"})
-      }
-      function hideLoadingIndicator(text = "Loading ...") {
-        $.mobile.loading("hide")
-      }
-      //This is much better, since then interactive programming is a lot more simpler since 
-      //the status of the app is saved in the local store
-      function saveServiceURLToLocalStore() {
-        let url = (httpOption.checked ? "http" : "https") + "://"
-        url += hostName.value + ":" + portNumber.value + "/"
-        url += serviceName.value + "/api/"
-        console.log(url)
-        localStorage.setItem("sqlbroker",url)
-      }
-      function sql() { return localStorage.getItem("sqlbroker") + "SQL"} 
-      function bo() { return localStorage.getItem("sqlbroker") + "BO"} 
-      async function SQLBroker(SQL) {
-        try {
-          showLoadingIndicator()
-          return await $.ajax({url:sql(),type:"POST",dataType:"json",
-              contentType:"application/json",processData:false,
-              data:JSON.stringify({SQL})})
-        } finally {
-          hideLoadingIndicator()
-        }
-      }
-      async function sleepAsync(ms){
-        return new Promise(resolve => setTimeout(resolve,ms))
-      }
-</script>
-  </section><!-- /page -->
+    </script>
+  </section>
 
   <!-- LOGIN -->
-  <section data-role="page" id="login" data-theme="b">
-    <div data-role="panel" data-position="right" id="login_error">
-      <!-- panel content goes here -->
-      <h2 id="login_error_text">Invalid user name or PIN</h2>
-      <a href="#login" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
-    </div><!-- /panel -->
+  <section data-role="page" id="loginPage" data-theme="b">
+    <div data-role="panel" data-position="right" id="loginErrorPanel">
+      <p id="loginErrorDisplayText">Invalid user name or PIN</p>
+      <a href="#loginPage" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
+    </div>
     <header data-role="header">
       <h1>Login</h1>
-    </header><!-- /header -->
+    </header>
     <main role="main" class="ui-content">
       <div class="ui-grid-solo">
         <div class="ui-block-a">
-          <input placeholder="user" type="text" data-clear-btn="true" name="user" id="user" value="merlina"
+          <input placeholder="user" type="text" data-clear-btn="true" name="userCodeInputText" id="userCodeInputText" value="merlina"
             style="text-align: center;">
         </div>
         <div class="ui-block-a">
-          <input placeholder="1234" type="number" data-clear-btn="true" name="pin" pattern="[0-9]*" id="pin" step="1"
+          <input placeholder="1234" type="number" data-clear-btn="true" name="pinInoutNumber" pattern="[0-9]*" id="pinInputNumber" step="1"
             value="" style="text-align: center;">
         </div>
         <div class="ui-block-a">
@@ -170,91 +138,128 @@
           </div>
         </div>
         <div class="ui-block-a">
-          <h2 id="loginUserName" style="text-align: center;"></h2>
+          <h2 id="loginUserNameDisplayText" style="text-align: center;"></h2>
         </div>
       </div>
-    </main><!-- /content -->
+    </main>
     <footer data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
-        <a href="#config" data-direction="reverse"
+        <a href="#configPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Config</a>
-        <a id="loginButton" href="#resources" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Login</a>
-        <a href="#login_error"
+        <a id="loginButton" href="#resourcesPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Login</a>
+        <a href="#loginErrorPanel"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
     </footer>
     <script>
       $(document).on("pageinit", async e => {
-        if(e.target.id === "login") {
+        if(e.target.id === "loginPage") {
           loginButton.addEventListener("click", async e => {
             e.preventDefault()
-            //saveUserToLocalStore()
             try {
-              let response = await SQLBroker(
-                `select Code,e.userId,lastName,firstName 
-                from OHEM e left outer join OUSR u on e.userId = u.USERID  
-                where u.USER_CODE = '${user.value}' 
-                -- or Code = '${user.value}'`)
+              // let response = await SQLBroker(
+              //   `select Code,e.userId,lastName,firstName 
+              //   from OHEM e left outer join OUSR u on e.userId = u.USERID  
+              //   where u.USER_CODE = '${user.value}' 
+              //   -- or Code = '${user.value}'`)
+              let response = await userQuery("QueryEmployeeByUserCode",userCodeInputText.value)
               if(response.data.length) {
-                loginUserName.textContent = "Hello " + response.data[0].lastName + ", " + response.data[0].firstName 
-                await sleepAsync(500)
-                $.mobile.changePage("#resources")
+                saveUserToLocalStore(response.data[0])
+                loginUserNameDisplayText.textContent = "Hello " + response.data[0].lastName + ", " + response.data[0].firstName 
+                await sleepAsync(2000)
+                $.mobile.changePage("#resourcesPage")
               } else {
-                login_error_text.textContent = `Invalid user code ${user.value}`
-                $("#login_error").panel("open")
+                loginErrorDisplayText.textContent = `Invalid user code ${userCodeInputText.value}`
+                $("#loginErrorPanel").panel("open")
               }
             } catch(error) {
-                login_error_text.textContent = error.responseJSON.errorText
-                $("#login_error").panel("open")
-                // console.log(error);
+                loginErrorDisplayText.textContent = error.responseJSON.errorText
+                $("#loginErrorPanel").panel("open")
+                console.log(error);
               }
             }
           )
         }
       })
-
     </script>
   </section>
 
   <!-- RESOURCES -->
-  <div data-role="page" id="resources" data-theme="b">
-    <div data-role="header">
+  <section data-role="page" id="resourcesPage" data-theme="b">
+    <div data-role="panel" data-position="right" id="resourcesErrorPanel">
+      <p id="resourcesErrorDisplayText">Some Problem</p>
+      <a href="#resourcesPage" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
+    </div>
+    <header data-role="header">
       <h1>Resources</h1>
-    </div>
-    <div role="main" class="ui-content">
-      <ul data-role="listview" data-count-theme="b" data-filter="true" data-filter-placeholder="Search ..."
+    </header>
+    <main role="main" class="ui-content">
+      <ul id="resourcesListView"
+        data-role="listview" data-count-theme="b" data-filter="true" data-filter-placeholder="Search ..."
         data-inset="true">
-        <li data-icon="gear"><a href="#">Cracker Painter<span class="ui-li-count">98</span></a></li>
-        <li data-icon="gear"><a href="#">Giga Crane BX5<span class="ui-li-count">41</span></a></li>
-        <li data-icon="user"><a href="#">Packagers<span class="ui-li-count">4</span></a></li>
-        <li data-icon="user"><a href="#">MC SEtup Specialist<span class="ui-li-count">12</span></a></li>
-        <li data-icon="star"><a href="#">Red Big Hammers <span class="ui-li-count">328</span></a></li>
-        <li data-icon="star"><a href="#">Trash Can Hanger <span class="ui-li-count">62</span></a></li>
+        <li data-icon="gear"><a href="#startJobPage">Cracker Painter<span class="ui-li-count">98</span></a></li>
+        <li data-icon="gear"><a href="#startJobPage">Giga Crane BX5<span class="ui-li-count">41</span></a></li>
+        <li data-icon="user"><a href="#startJobPage">Packagers<span class="ui-li-count">4</span></a></li>
+        <li data-icon="user"><a href="#startJobPage">MC SEtup Specialist<span class="ui-li-count">12</span></a></li>
+        <li data-icon="star"><a href="#startJobPage">Red Big Hammers <span class="ui-li-count">328</span></a></li>
+        <li data-icon="star"><a href="#startJobPage">Trash Can Hanger <span class="ui-li-count">62</span></a></li>
       </ul>
-    </div>
-    <div data-role="footer" data-position="fixed">
+    </main>
+    <footer data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
-        <a href="#login" data-direction="reverse"
+        <a href="#loginPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Logout</a>
-        <a href="#startjob" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Jobs</a>
-        <a href="#login_error"
+        <a href="#startJobPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Jobs</a>
+        <a href="#resourcesErrorPanel"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
-    </div>
-  </div>
+    </footer>
+    <script>
+      async function queryAndShowResourcesAsync() {
+        const userDetails = getUserDetailsFromLocalStore()
+        try {
+          const response = await userQuery("QueryResourcesForUser",userDetails.USER_CODE)
+          const htmlText = response.data.reduce((a,r)=> a += `
+          <li data-icon="${resIcon(r.ResType)}">
+            <a href="#startJobPage" data-rescode="${r.ResCode}">${r.ResName}<span class="ui-li-count">${r.OpenJobs}</span></a>
+          </li>`,"")
+          $("#resourcesListView").html(htmlText).listview("refresh")
+        } catch(error) {
+          resourcesErrorDisplayText.textContent = textFrom(error)
+          $("#resourcesErrorPanel").panel("open")
+        }
+      }
+      $(document).on("pagebeforeshow", e => {
+        if(e.target.id === "resourcesPage") {
+          queryAndShowResourcesAsync() // No need to call this here with await
+        }        
+      })
+      $(document).on("pageinit", async e => {
+        if(e.target.id === "resourcesPage") {
+          $("#resourcesListView").click(e => {
+            //e.preventDefault()
+            //resourcesErrorDisplayText.textContent = e.target.dataset.rescode
+            //$("#resourcesErrorPanel").panel("open")
+            saveResCodeToLocalStore(e.target.dataset.rescode)
+          })
+        }
+      })
+    </script>
+  </section>
 
   <!-- START JOB -->
-  <div data-role="page" id="startjob" data-theme="b">
-    <div data-role="panel" data-position="right" id="startjob_error">
-      <h2>No jobs to start</h2>
-      <a href="#startjob" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
-    </div><!-- /panel -->
-    <div data-role="header">
-      <h1>Jobs</h1>
-      <a href="#resource" data-icon="gear">Res</a>
+  <section data-role="page" id="startJobPage" data-theme="b">
+    <div data-role="panel" data-position="right" id="startJobErrorPanel">
+      <p id="startJobErrorDisplayText">No jobs to start</p>
+      <a href="#startJobPage" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back" data-rel="close">Close</a>
     </div>
-    <div role="main" class="ui-content">
-      <ul data-role="listview" data-filter="true" data-filter-placeholder="Search ..." data-inset="true">
+    <header data-role="header">
+      <h1>Jobs</h1>
+      <a href="#resourcesPage" data-icon="gear">Res</a>
+    </header>
+    <main role="main" class="ui-content">
+      <ul id="openJobsListView"
+        data-role="listview" data-filter="true" data-filter-placeholder="Search ..." data-inset="true">
         <li data-role="list-divider">10/8/2020 Morning Shift<span class="ui-li-count">2</span></li>
         <li data-icon="gear">
           <a href="#runningjob">
@@ -279,18 +284,82 @@
           </a>
         </li>
       </ul>
-    </div>
-    <div data-role="footer" data-position="fixed">
+    </main>
+    <footer data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
-        <a href="#resources" data-direction="reverse"
+        <a href="#resourcesPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Resource</a>
         <a href="#runningjob" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Start</a>
-        <a href="#login" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
-        <a href="#startjob_error"
+        <a href="#loginPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
+        <a href="#startJobErrorPanel"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-forbidden ui-btn-b">Hmm</a>
       </div>
-    </div>
-  </div>
+    </footer>
+    <script>
+      function showOpenJobsToStart(data) {
+        let runningDate = null
+        const htmlText = data.reduce((a,r)=> {
+          if(r.EffStartDate != runningDate) {
+            runningDate = r.EffStartDate
+            a += `
+              <li data-role="list-divider">${formatDate(runningDate)}
+                <span class="ui-li-count">${formatTime(r.BeginTime)}</span>
+              </li>
+            `    
+          }
+          a += `
+              <li data-icon="${resIcon(r.ResType)}">
+                <a href="#runningjob">
+                  <h2>${r.Name}</h2><span class="ui-li-count">${parseFloat(r.OpenQty)}</span>
+                  <p><strong>${r.ProdName}</strong></p>
+                  <p class="ui-li-aside"><strong>${r.DocNum}-${r.VisOrder + 1} (${formatTime(r.BeginTime)})</strong></p>
+                </a>
+              </li>
+              `
+          return a
+        },"")
+        $("#openJobsListView").html(htmlText).listview("refresh")
+      }
+      function queryOpenJobsToStartForUserAndResource() {
+        const userDetails = getUserDetailsFromLocalStore()
+        const resCode = getResCodeFromLocalStore()
+        const url = encodeURI(uq() + `QueryOpenJobsToStartForUserAndResource?p0=${resCode}`)
+        console.log(url)
+        showLoadingIndicator()
+        // $.ajax({url,method:"GET"}).done(sqlResult => {
+        //   console.log(sqlResult)
+        //   if(sqlResult.errorCode == 0) {
+        //     showOpenJobsToStart(sqlResult.data)
+        //   } else {
+        //     // startJobErrorDisplayText.textContent = sqlResult.errorText
+        //     // $("#startJobErrorPanel").panel("open")
+        //   } 
+        // }).fail((jxhr,status)=>{
+        //   console.log(jxhr)
+        //   startJobErrorDisplayText.textContent = jxhr.responseJSON.errorText
+        //   $("#startJobErrorPanel").panel("open")
+        // }).always(hideLoadingIndicator)
+        
+        fetch(url).then(r => r.json()).then(async sqlResult => {
+          console.log(sqlResult)
+          if(sqlResult.errorCode == 0) {
+            // await sleepAsync(2000)
+            showOpenJobsToStart(sqlResult.data)
+          } else {
+            await sleepAsync(500)
+            startJobErrorDisplayText.textContent = sqlResult.errorText
+            $("#startJobErrorPanel").panel("open")
+          }
+        }).finally(hideLoadingIndicator)
+      }
+      $(document).on("pagebeforeshow", async e => {
+        if(e.target.id === "startJobPage") {
+          queryOpenJobsToStartForUserAndResource()
+        }        
+      })
+
+    </script>
+  </section>
 
   <!-- RUNNING JOB -->
   <div data-role="page" id="runningjob" data-theme="b">
@@ -320,7 +389,7 @@
     </div>
     <div data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
-        <a href="#login" data-direction="reverse"
+        <a href="#loginPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
         <a href="#completedquantities"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Stop</a>
@@ -377,7 +446,7 @@
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
         <a href="#runningjob" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Cancel</a>
-        <a href="#resources" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a href="#resourcesPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
         <a href="#completedquantities_error"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
