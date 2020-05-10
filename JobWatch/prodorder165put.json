@@ -1,0 +1,86 @@
+{
+  "comment":"This is a perfect example",
+  "bo": {
+      "BOM": {
+          "BO": {
+              "AdmInfo": {
+                  "Object": "202"
+              },
+              "OWOR": {
+                  "row": {
+                      "DocEntry": "165",
+                      "DocNum": "165",
+                  }
+              },
+              "WOR1": {
+                  "row": [
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "0",
+                          "U_CompletedQty": 1,
+                          "U_ReworkQty": 2,
+                          "U_RejectedQty": 3
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "1",
+                          "ItemCode": "R300005",
+                          "U_CompletedQty": 4,
+                          "U_ReworkQty": 5,
+                          "U_RejectedQty": 6
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "2",
+                          "ItemCode": "R300007",
+                          "U_CompletedQty": 7,
+                          "U_ReworkQty": 8,
+                          "U_RejectedQty": 9
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "3",
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "4",
+                          "ItemCode": "R300005",
+                          "U_CompletedQty": 10,
+                          "U_ReworkQty": 11,
+                          "U_RejectedQty": 12
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "5",
+                          "ItemCode": "R300006",
+                          "U_CompletedQty": 13,
+                          "U_ReworkQty": 14,
+                          "U_RejectedQty": 15
+                      }
+                  ]
+              },
+              "WOR4": {
+                  "row": [
+                      {
+                          "DocEntry": "165",
+                          "StageId": "1",
+                          "SeqNum": "1",
+                          "StgEntry": "1",
+                          "Status": "I",
+                      },
+                      {
+                          "DocEntry": "165",
+                          "StageId": "2",
+                          "SeqNum": "2",
+                          "StgEntry": "2",
+                          "Status": "I",
+                      }
+                  ]
+              }
+          }
+      }
+  },
+  "connection": {
+      "Profile": "MikiTest",
+  }
+}

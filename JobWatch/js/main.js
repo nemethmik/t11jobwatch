@@ -1,6 +1,18 @@
 /*
 main.js shouldn't have any reference to IDs of the HTML pages
 */
+function deleteAllPropsExcept(obj,keepProps) {
+    for(const k in obj) {
+        if(!keepProps.includes(k) && obj.hasOwnProperty(k)) delete obj[k]
+    }
+}
+function ifNaN(n,replacementValue) {
+    return isNaN(n) ? replacementValue : n
+}
+
+function getFloat(anything) {
+    return ifNaN(parseFloat(anything),0)
+}
 
 function resIcon(resType) {
     return resType === 'M' ? 'gear' : 'user'
@@ -16,6 +28,28 @@ function formatTime(intTime) {
     //console.log(t)
     return t
 }
+function sapTimeToMinutes(sapTime) {
+    let t = "0000" + sapTime
+    t = t.substring(t.length - 4,t.length)
+    const h = parseInt(t.substring(0,2))
+    const m = parseInt(t.substring(2,4))
+    return (h * 60) + m
+}
+function minuteDiff(date1,date2) {
+    const diffMillis = Math.abs(date2 - date1)
+    return Math.ceil(diffMillis/(1000 * 60))
+}
+function formatMinDiff(minutes) {
+    const quot = Math.floor(minutes/60)
+    const rem = minutes % 60
+    return `${quot}:${rem}` 
+}
+function sapDTToDate(dateStr,timeStr) {
+    const sd = new Date(dateStr)
+    const bt = sapTimeToMinutes(timeStr)
+    sd.setMinutes(bt)
+    return sd
+}
 /**
  * Extract text info from error object if possible 
  * @param {*} error 
@@ -24,15 +58,19 @@ function textFrom(error) {
     if(error.responseJSON) {
         if(error.responseJSON.Message) return error.responseJSON.Message
         if(error.responseJSON.errorText) return error.responseJSON.errorText
+    } else if (error.Message) {
+        return error.Message
+    } else if (error.errorText) {
+        return error.errorText
     } else return "" + error
 }
 
 function showLoadingIndicator(text = "Loading ...") {
-    console.log("show indicator")
+    // console.log("show indicator")
     $.mobile.loading("show", { text, textVisible: true, theme: "b" })
 }
 function hideLoadingIndicator(text = "Loading ...") {
-    console.log("hide indicator")
+    // console.log("hide indicator")
     $.mobile.loading("hide")
 }
 //This is much better, since then interactive programming is a lot more simpler since 
@@ -45,8 +83,10 @@ function saveServiceURLToLocalStore(bHttp,sHostName,nPort,sServiceName) {
     localStorage.setItem("sqlbroker", url)
 }
 function sql() { return localStorage.getItem("sqlbroker") + "SQL" }
-function bo() { return localStorage.getItem("sqlbroker") + "BO" }
+function bo() { return localStorage.getItem("sqlbroker") + "BO/" }
 function uq() { return localStorage.getItem("sqlbroker") + "UQ/JobWatch/" }
+function mr() { return localStorage.getItem("sqlbroker") + "MR/" }
+
 async function SQLBroker(SQL) {
     try {
         showLoadingIndicator()
@@ -114,10 +154,122 @@ function saveResCodeToLocalStore(resCode) {
 function getResCodeFromLocalStore() {
     return localStorage.getItem("resCode")
 }
+function saveOperationDetailsToLocalStore(opDetails) {
+    localStorage.setItem("operationDetails", JSON.stringify(opDetails))
+}
+function getOperationDetailsFromLocalStore() {
+    return JSON.parse(localStorage.getItem("operationDetails"))
+}
+function saveRunningJobToLocalStore(data) {
+    localStorage.setItem("RunningJob", JSON.stringify(data))
+}
+function getRunningJobFromLocalStore() {
+    return JSON.parse(localStorage.getItem("RunningJob"))
+}
+function saveProductionOrderToLocalStore(data) {
+    localStorage.setItem("ProductionOrder", JSON.stringify(data))
+}
+function getProductionOrderFromLocalStore() {
+    return JSON.parse(localStorage.getItem("ProductionOrder"))
+}
 
+function newActivity(profile, docEntry,details,durationSeconds,userid,status,lineNum) {
+    if(!docEntry) throw new Error("No docEntry defined for newActivity")
+    if(!lineNum) throw new Error("No lineNum defined for newActivity")
+    return {
+        connection: { Profile: profile }, //"MikiTest"
+        bo: {
+            Activity: {
+                // "ActivityCode": "15",
+                Subject: "-1",
+                "DocType": "202",
+                "DocEntry": docEntry,
+                "Priority": "pr_Normal",
+                "Details": details, //"Operation Started for operation 155-4",
+                "Activity": "cn_Task",
+                "ActivityType": "-1",
+                "Duration": durationSeconds,
+                "DurationType": "du_Seconds",
+                "HandledBy": userid, //"22",
+                "U_LineNum": lineNum, //"5",
+                "Status": status, // -3 completed, -2 not started, "1",
+                "Notes": `Created by JobWatch for user ${userid}`,
+            }
+        }
+    }
+}
 
+function makeActivityObjectForUpdate(profile, activityCode, durationSeconds, status) {
+    return {
+        connection: { Profile: profile }, //"MikiTest"
+        bo: {
+            Activity: {
+                "ActivityCode": activityCode,
+                "Duration": durationSeconds,
+                "DurationType": "du_Seconds",
+                "Status": status, // -3 completed, -2 not started, "1",
+            }
+        }
+    }
+}
 
+function newMR(profile,reqType,boName,boReq) {
+    const mr = {
+        connection: { Profile: profile }, //"MikiTest"
+        requests: []
+    }
+    if(boReq) addBoReqToMR(mr,reqType,boName,boReq)
+    return mr
+}
 
+function addBoReqToMR(mr,reqType,boName,boReq,boId) {
+    if(!boReq) throw new Error("No boReq defined for addBoReqToMR of " + boName)
+    mr.requests.push({
+        reqType: reqType,
+        boName: boName,
+        boId: boId,
+        boReq: boReq
+    })
+    return mr
+}
+
+function newIssueForProd(profile, ref2, comments, jrnlMemo, docEntry, lineNum, quantity, whsCode) {
+    const ifpReq = {
+        connection: { Profile:profile}, 
+        "bo": {
+            "BOM": {
+                "BO": {
+                    "AdmInfo": {
+                        "Object": "60"
+                    },
+                    "OIGE": {
+                        "row": {
+                            "Ref2": ref2,
+                            "Comments": comments,
+                            "JrnlMemo": jrnlMemo,
+                        }
+                    },
+                    "IGE1": {
+                        "row": []
+                    }
+                }
+            }
+        }
+    }
+    addLineToIssueForProd(ifpReq,docEntry, lineNum, quantity, whsCode)
+    return ifpReq
+}
+function addLineToIssueForProd(ifpReq,docEntry, lineNum, quantity, whsCode) {
+    ifpReq.bo.BOM.BO.IGE1.row.push({
+        "BaseRef": docEntry,
+        "BaseType": "202",
+        "BaseEntry": docEntry,
+        "BaseLine": lineNum,
+        "Quantity": quantity,
+        "WhsCode": whsCode,
+    })
+    return ifpReq
+}
 
 
 
@@ -137,4 +289,4 @@ window.onload = function () {
     // 	box = document.querySelector('#textbox');
     // 	box.innerHTML = box.innerHTML == "Basic" ? "Sample" : "Basic";
     // });    
-};
+}

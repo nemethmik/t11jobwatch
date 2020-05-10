@@ -75,7 +75,7 @@
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
         <a href="#" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Exit</a>
-        <a id="doneButton" href="#loginPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a id="configDoneButton" href="#loginPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
         <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
     </footer>
@@ -84,7 +84,7 @@
       //pageinit event is only JQuery event
       $(document).one("pageinit", async e => {
         if(e.target.id === "configPage") {
-          doneButton.addEventListener("click", async e => {
+          configDoneButton.addEventListener("click", async e => {
             e.preventDefault()
             saveServiceURLToLocalStore(httpInputRadio.checked,hostNameInputText.value,portInputNumber.value,serviceNameInputText.value)
             try {
@@ -117,7 +117,7 @@
     <main role="main" class="ui-content">
       <div class="ui-grid-solo">
         <div class="ui-block-a">
-          <input placeholder="user" type="text" data-clear-btn="true" name="userCodeInputText" id="userCodeInputText" value="merlina"
+          <input placeholder="user" type="text" data-clear-btn="true" name="userCodeInputText" id="userCodeInputText" value="maria"
             style="text-align: center;">
         </div>
         <div class="ui-block-a">
@@ -152,6 +152,10 @@
       </div>
     </footer>
     <script>
+      function showLoginError(text) {
+        loginErrorDisplayText.textContent = text
+        $("#loginErrorPanel").panel("open")
+      }
       $(document).on("pageinit", async e => {
         if(e.target.id === "loginPage") {
           loginButton.addEventListener("click", async e => {
@@ -166,15 +170,35 @@
               if(response.data.length) {
                 saveUserToLocalStore(response.data[0])
                 loginUserNameDisplayText.textContent = "Hello " + response.data[0].lastName + ", " + response.data[0].firstName 
-                await sleepAsync(2000)
-                $.mobile.changePage("#resourcesPage")
+                try {
+                  showLoadingIndicator()
+                  // await sleepAsync(2000)
+                  const userCode = response.data[0].USER_CODE
+                  const r = await fetch(uq() + `QueryRunningJobsForUser?p0=${userCode}`)
+                  const sqlResult = await r.json()
+                  console.log(sqlResult)
+                  if(sqlResult.errorCode === 0) {
+                    if(sqlResult.data && sqlResult.data.length > 0) {
+                      //User has runnig job, so, show running job page
+                      //Even if she has multiple running jobs we show only the first one.
+                      //This application supports only-one-at-a-time running job concept
+                      saveRunningJobToLocalStore(sqlResult.data[0])
+                      $.mobile.changePage("#runningJobPage")      
+                    } else {
+                      //No running job show resources to pick one for starting operation
+                      $.mobile.changePage("#resourcesPage")      
+                    }
+                  } else {
+                    showLoginError(textFrom(sqlResult))
+                  }
+                } catch(error) {
+                  showLoginError(textFrom(sqlResult))
+                } finally {hideLoadingIndicator()}                
               } else {
-                loginErrorDisplayText.textContent = `Invalid user code ${userCodeInputText.value}`
-                $("#loginErrorPanel").panel("open")
+                showLoginError(`Invalid user code ${userCodeInputText.value}`)
               }
             } catch(error) {
-                loginErrorDisplayText.textContent = error.responseJSON.errorText
-                $("#loginErrorPanel").panel("open")
+                showLoginError(textFrom(error))
                 console.log(error);
               }
             }
@@ -209,9 +233,8 @@
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
         <a href="#loginPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Logout</a>
-        <a href="#startJobPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Jobs</a>
-        <a href="#resourcesErrorPanel"
-          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+        <!-- <a href="#startJobPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Jobs</a> -->
+        <!-- <a href="#resourcesErrorPanel" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a> -->
       </div>
     </footer>
     <script>
@@ -262,7 +285,7 @@
         data-role="listview" data-filter="true" data-filter-placeholder="Search ..." data-inset="true">
         <li data-role="list-divider">10/8/2020 Morning Shift<span class="ui-li-count">2</span></li>
         <li data-icon="gear">
-          <a href="#runningjob">
+          <a href="#runningJobPage">
             <h2>Dry Hanging</h2><span class="ui-li-count">4500</span>
             <p><strong>Red Bike BXP 75</strong></p>
             <p class="ui-li-aside"><strong>35478-12 (6:24)</strong></p>
@@ -289,13 +312,16 @@
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
         <a href="#resourcesPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Resource</a>
-        <a href="#runningjob" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Start</a>
+        <!-- <a href="#runningJobPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Start</a> -->
         <a href="#loginPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
-        <a href="#startJobErrorPanel"
-          class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-forbidden ui-btn-b">Hmm</a>
+        <!-- <a href="#startJobErrorPanel" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-forbidden ui-btn-b">Hmm</a> -->
       </div>
     </footer>
     <script>
+      function showStartJobError(text) {
+        startJobErrorDisplayText.textContent = text
+        $("#startJobErrorPanel").panel("open")
+      }
       function showOpenJobsToStart(data) {
         let runningDate = null
         const htmlText = data.reduce((a,r)=> {
@@ -309,10 +335,10 @@
           }
           a += `
               <li data-icon="${resIcon(r.ResType)}">
-                <a href="#runningjob">
-                  <h2>${r.Name}</h2><span class="ui-li-count">${parseFloat(r.OpenQty)}</span>
+                <a href="#runningJobPage" data-docentry="${r.DocEntry}" data-linenum="${r.LineNum}">
+                  <h2 data-docentry="${r.DocEntry}" data-linenum="${r.LineNum}" >${r.Name}</h2><span class="ui-li-count">${parseFloat(r.OpenQty)}</span>
                   <p><strong>${r.ProdName}</strong></p>
-                  <p class="ui-li-aside"><strong>${r.DocNum}-${r.VisOrder + 1} (${formatTime(r.BeginTime)})</strong></p>
+                  <p class="ui-li-aside"><strong>${r.DocNum}-${r.VisOrder} (${formatTime(r.BeginTime)})</strong></p>
                 </a>
               </li>
               `
@@ -323,55 +349,105 @@
       function queryOpenJobsToStartForUserAndResource() {
         const userDetails = getUserDetailsFromLocalStore()
         const resCode = getResCodeFromLocalStore()
-        const url = encodeURI(uq() + `QueryOpenJobsToStartForUserAndResource?p0=${resCode}`)
+        const url = encodeURI(uq() + `QueryOpenJobsToStartForUserAndResource?p0=${resCode}&p1=${userDetails.USER_CODE}`)
         console.log(url)
         showLoadingIndicator()
-        // $.ajax({url,method:"GET"}).done(sqlResult => {
-        //   console.log(sqlResult)
-        //   if(sqlResult.errorCode == 0) {
-        //     showOpenJobsToStart(sqlResult.data)
-        //   } else {
-        //     // startJobErrorDisplayText.textContent = sqlResult.errorText
-        //     // $("#startJobErrorPanel").panel("open")
-        //   } 
-        // }).fail((jxhr,status)=>{
-        //   console.log(jxhr)
-        //   startJobErrorDisplayText.textContent = jxhr.responseJSON.errorText
-        //   $("#startJobErrorPanel").panel("open")
-        // }).always(hideLoadingIndicator)
-        
         fetch(url).then(r => r.json()).then(async sqlResult => {
-          console.log(sqlResult)
+          //console.log(sqlResult)
           if(sqlResult.errorCode == 0) {
-            // await sleepAsync(2000)
+            await sleepAsync(500) //For making fun only
             showOpenJobsToStart(sqlResult.data)
           } else {
-            await sleepAsync(500)
-            startJobErrorDisplayText.textContent = sqlResult.errorText
-            $("#startJobErrorPanel").panel("open")
+            showStartJobError(sqlResult.errorText)
           }
         }).finally(hideLoadingIndicator)
       }
-      $(document).on("pagebeforeshow", async e => {
+      $(document).on("pageshow", async e => {
         if(e.target.id === "startJobPage") {
-          queryOpenJobsToStartForUserAndResource()
+         queryOpenJobsToStartForUserAndResource()
         }        
       })
-
+      $(document).on("pagebeforeshow", async e => {
+        if(e.target.id === "startJobPage") {
+          $("#openJobsListView").html("").listview("refresh")
+        }        
+      })
+      $(document).on("pageinit", e => {
+        if(e.target.id === "startJobPage") {
+          $("#openJobsListView").click(e => {
+            //Since this handler is executed asynchronously we have to prevent default navigation
+            //When all are OK, manually move to the next page.
+            e.preventDefault()
+            const op = {
+              DocEntry: e.target.dataset.docentry,
+              LineNum: e.target.dataset.linenum,
+            }
+            const ud = getUserDetailsFromLocalStore()
+            //console.log(op)
+            if(op.DocEntry && op.LineNum) {
+              saveOperationDetailsToLocalStore(op)
+              //Query, if operation can be started by the user as a last check and verification
+              showLoadingIndicator()
+              const url = uq() + `CanUserStartOperation?p0=${ud.USER_CODE}&p1=${op.LineNum}&p2=${op.DocEntry}`
+              //console.log(url)
+              //Don't place url into curly braces, fetch goes crazy
+              fetch(url).then(r => r.json()).then(sqlResult => {
+                  if(sqlResult.errorCode == 0) {
+                    if(sqlResult.data && sqlResult.data.length > 0) {
+                      console.log(`Yes, ${ud.USER_CODE} can start operation ${op.DocEntry}-${op.LineNum}`, sqlResult.data)
+                      return sqlResult.data
+                    } else {
+                      throw new Error(`User ${ud.USER_CODE} cannot start job ${op.DocEntry}-${op.LineNum}. Maybe the completed has reached planned qty`)
+                    }
+                  } else {
+                    showStartJobError(sqlResult.errorText)
+                  }
+                }).then(data => {
+                  if(data && data.length > 0) {
+                    console.log("Create an activity for the start operation using BO/Activity", data[0])
+                    const act = newActivity(null, data[0].DocEntry
+                      ,`Operation ${data[0].DocEntry}-${data[0].LineNum} started for ${data[0].USERID}`
+                      ,2 * 60 * 60,data[0].USERID,1,data[0].LineNum) // 1 is a user defined code for started
+                    console.log(act)
+                    fetch(bo() + "Activity",{method:"POST",body:JSON.stringify(act),
+                      headers:{"Content-Type":"application/json"}
+                      }).then(r=>r.json()).then(boResult=>{
+                      if(boResult.errorCode === 0) {
+                        console.log(boResult)
+                        //Go back to the login page, it's meaningless to go to the 
+                        //running job page, when she logs in again, and if she
+                        //has running job the control jumps from login to the
+                        //running job page right away
+                        $.mobile.changePage("#loginPage")
+                      } else {
+                        showStartJobError(textFrom(boResult))
+                      }
+                    })
+                  }
+                }).catch(error => {
+                  console.log(error)
+                  showStartJobError(textFrom(error))
+                }).finally(hideLoadingIndicator)
+            } else {
+              showStartJobError("Click on the gear in the list")
+            }
+          })
+        }
+      })
     </script>
   </section>
 
   <!-- RUNNING JOB -->
-  <div data-role="page" id="runningjob" data-theme="b">
-    <div data-role="header">
+  <section data-role="page" id="runningJobPage" data-theme="b">
+    <header data-role="header">
       <h1>Running Job</h1>
-    </div>
-    <div role="main" class="ui-content">
+    </header>
+    <main role="main" class="ui-content">
       <div class="ui-grid-a">
         <div class="ui-block-a">
-          <h2>Dry Hanging</h2><strong>[4500]</strong>
-          <p><strong>Red Bike BXP 75</strong></p>
-          <p class="ui-li-aside"><strong>35478-12 (6:24)</strong></p>
+          <h2 id="operationNameDisplayText">Dry Hanging</h2><strong id="openQtyDisplayText">[4500]</strong>
+          <p><strong id="productNameDisplayText">Red Bike BXP 75</strong></p>
+          <p class="ui-li-aside"><strong id="operationIDDisplayText">35478-12 (6:24)</strong></p>
         </div>
         <div class="ui-block-b">
           <div class="ui-grid-solo">
@@ -386,72 +462,205 @@
           </div>
         </div>
       </div>
-    </div>
-    <div data-role="footer" data-position="fixed">
+    </main>
+    <footer data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
         <a href="#loginPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-b">Logout</a>
-        <a href="#completedquantities"
+        <a href="#jobQuantitiesPage"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-b">Stop</a>
         <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
-    </div>
-  </div>
+    </footer>
+    <script>
+      $(document).on("pagebeforeshow", e => {
+        if(e.target.id === "runningJobPage") {
+          const job = getRunningJobFromLocalStore()
+          operationNameDisplayText.textContent = job.RSName ? job.RSName : job.ItemName
+          openQtyDisplayText.textContent = `[ ${parseInt(job.OpenQty)} ]`
+          productNameDisplayText.textContent = job.ProdName
+          operationIDDisplayText.textContent = `${job.DocNum}-${job.VisOrder}`
+          starttime.textContent = formatTime(job.BeginTime)
+          const runningMinutes = minuteDiff(sapDTToDate(job.Recontact,job.BeginTime),new Date())
+          runningtime.textContent = formatMinDiff(runningMinutes) + ` (${runningMinutes/60}h)`
+        }
+      })
+      /*
+      RSName: "Route Stage 1"
+      Action: "T" BeginTime: "1833" Comments: "Don't hesitate to do the job perfectly" ClgCode: "16"
+      DocEntry: "155" DocNum: "155" ItemCode: "R300005" ItemName: "Assembly Machine"
+      OpenQty: "50.000000" ProdName: "32GB Memory Server" Recontact: "5/7/2020 12:00:00 AM"
+      SeqNum: "" StageId: "" Status: "P" USERID: "22" USER_CODE: "maria"
+      */
+    </script>
+  </section>
 
-  <!-- COMPLETED QUANTITIES -->
-  <div data-role="page" id="completedquantities" data-theme="b">
-    <div data-role="panel" data-position="right" id="completedquantities_error">
-      <h2>Invalid rejected quantity</h2>
-      <a href="#completedquantities" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
+  <!-- JOB QUANTITIES -->
+  <section data-role="page" id="jobQuantitiesPage" data-theme="b">
+    <div data-role="panel" data-position="right" id="jobQuantitiesErrorPanel">
+      <h2 id="jobQuantitiesErrorDisplayText">Invalid rejected quantity</h2>
+      <a href="#jobQuantitiesPage" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-back"
         data-rel="close">Close</a>
-    </div><!-- /panel -->
-    <div data-role="header">
-      <!-- /header -->
-      <h1>Quantities</h1>
     </div>
-    <div role="main" class="ui-content">
+    <header data-role="header">
+      <h1>Quantities</h1>
+    </header>
+    <main role="main" class="ui-content">
       <div class="ui-grid-a">
         <div class="ui-block-a">
-          <p style="text-align: right; margin-right: 16px;">Completed Qty:</p>
+          <p style="text-align: right; margin-right: 16px;">Compl Qty (<span id="completedQtyDisplayText">9999</span>)</p>
         </div>
         <div class="ui-block-b">
-          <input placeholder="56000" type="number" data-clear-btn="true" id="completedqty" step="1" value=""
+          <input placeholder="56000" type="number" data-clear-btn="true" id="completedQtyInputNumber" step="1" value=""
             style="text-align: center;">
         </div>
         <div class="ui-block-a">
-          <p style="text-align: right; margin-right: 16px;">Rework Qty:</p>
+          <p style="text-align: right; margin-right: 16px;">Rewrk Qty (<span id="reworkQtyDisplayText">9999</span>)</p>
         </div>
         <div class="ui-block-b">
-          <input placeholder="100" type="number" data-clear-btn="true" id="reworkqty" step="1" value=""
+          <input placeholder="100" type="number" data-clear-btn="true" id="reworkQtyInputNumber" step="1" value=""
             style="text-align: center;">
         </div>
         <div class="ui-block-a">
-          <p style="text-align: right; margin-right: 16px;">Rejected Qty:</p>
+          <p style="text-align: right; margin-right: 16px;">Rejctd Qty (<span id="rejectedQtyDisplayText">9999</span>)</p>
         </div>
         <div class="ui-block-b">
-          <div class="ui-grid-a">
-            <div class="ui-block-a">
-              <input placeholder="0" type="number" id="rejectedqty" step="1" value=""
-                style="text-align: center;"> <!-- data-clear-btn="true" -->
-            </div>
-            <div class="ui-block-b">
-              <input placeholder="0" type="number" data-clear-btn="true" id="rejqtydec" step="1" value=""
-                style="text-align: center;">
-            </div>
-          </div>
+          <input placeholder="0" type="number" id="rejectedQtyInputNumber" step="1" value=""
+          data-clear-btn="true" style="text-align: center;"> 
+        </div>
+        <div class="ui-block-a">
+          <p style="text-align: right; margin-right: 16px;">Hours</p>
+        </div>
+        <div class="ui-block-b">
+          <input placeholder="0" type="number" id="hoursInputNumber" step="1" value=""
+          readonly="true" style="text-align: center;"> 
         </div>
       </div>
-    </div>
-    <div data-role="footer" data-position="fixed">
+    </main>
+    <footer data-role="footer" data-position="fixed">
       <div data-role="controlgroup" data-type="horizontal" data-mini="false" style="text-align: center;">
-        <a href="#runningjob" data-direction="reverse"
+        <a href="#runningJobPage" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Cancel</a>
-        <a href="#resourcesPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
-        <a href="#completedquantities_error"
+        <a id="jobQuantitiesDoneButton" href="#resourcesPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
+        <a href="#jobQuantitiesErrorPanel"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
-    </div><!-- /footer -->
-  </div><!-- /page -->
+    </footer>
+    <script>
+      function showJobQuantitiesError(text) {
+        jobQuantitiesErrorDisplayText.textContent = text
+        $("#jobQuantitiesErrorPanel").panel("open")
+      }
+      $(document).on("pageinit", e => {
+        if(e.target.id === "jobQuantitiesPage") {
+          jobQuantitiesDoneButton.addEventListener("click", async e => {
+            e.preventDefault()
+            // console.log(e.target.id)
+            const po = getProductionOrderFromLocalStore()
+            const job = getRunningJobFromLocalStore()
+            const wor1 = po.BOM.BO.WOR1.row.find(r => r.LineNum === job.U_LineNum)
+            // [[[ STEP 1 - Issue Resource Minutes for Production Order Component Line ]]]
+            // SQL Broker's new Multi-Request service is going to be used, so let's bult a MR object
+            const runningMinutes = minuteDiff(sapDTToDate(job.Recontact,job.BeginTime),new Date())
+            const ifpReq = newIssueForProd(null, `${job.DocNum},${job.VisOrder}`
+              , ` Stop Job for ${job.DocNum}-${job.U_LineNum}`, `Issue Resource Consumption for Production from JobWatch`
+              , job.DocEntry, job.U_LineNum, runningMinutes/60) // For this project resource issues are in hours
+            const mReq = newMR(null)//Default profile is used
+            addBoReqToMR(mReq,"POST","InventoryGenExit",ifpReq) //TODO: UNCOMMENT ME
+            // [[[ STEP 2 - Update Quantities in Production Order Line ]]]
+            const completedQty = getFloat(completedQtyInputNumber.value) 
+            const reworkQty = getFloat(reworkQtyInputNumber.value)
+            const rejectedQty = getFloat(rejectedQtyInputNumber.value)
+            if(completedQty + reworkQty + rejectedQty) {
+              //Save the already reported quantities from WOR1 line since the lines will be truncated in the next step
+              const U_CompletedQty = getFloat(wor1.U_CompletedQty) 
+              const U_ReworkQty =  getFloat(wor1.U_ReworkQty)
+              const U_RejectedQty = getFloat(wor1.U_RejectedQty)
+              //WARNING! Save data into local variables before they will be truncated
+              deleteAllPropsExcept(po.BOM.BO.OWOR.row,"DocEntry") // For update DocEntry is enough
+              po.BOM.BO.WOR1.row.forEach((r,i) => 
+                deleteAllPropsExcept(r,"DocEntry,LineNum")
+              ) // DocEntry, Line num are for identifying the WOR1 line, the three user fields to be updated
+              wor1.U_CompletedQty = U_CompletedQty +  completedQty //Original plus the completed qty entered now 
+              wor1.U_ReworkQty =  U_ReworkQty + reworkQty
+              wor1.U_RejectedQty = U_RejectedQty + rejectedQty
+              console.log(wor1)
+              //Clean-up JSON tree of the gigantic Production Order tree to prevent unwanted behavior
+              //All fields will be removed except the ones defined in the list
+              addBoReqToMR(mReq,"PUT","ProductionOrders",{bo:po},job.DocEntry)//TODO: UNCOMMENT ME
+            }
+            // [[[ STEP 3 - Update Start Job Task Activity To Complete the Job ]]]
+            // Query Activity before updating
+            const actToUpdate = makeActivityObjectForUpdate(null, job.ClgCode, runningMinutes * 60, "-3") //Close
+            addBoReqToMR(mReq,"PUT","Activity",actToUpdate,job.ClgCode)//TODO: UNCOMMENT ME
+            console.log("Multi-Request",mReq)
+            let allTasksCompletedForStoppingTheRunningJob = false
+            try{
+              showLoadingIndicator()
+              const boResult = await (await fetch(mr(), //Multi-Requests are always with POST 
+                { method:"POST", body:JSON.stringify(mReq),
+                headers:{"Content-Type":"application/json"}})).json()
+              if(boResult.errorCode === 0) {
+                console.log("Running Job Stopped Successfully", boResult)
+                allTasksCompletedForStoppingTheRunningJob = true
+              } else showJobQuantitiesError(textFrom(boResult))
+            }catch(error){showJobQuantitiesError(textFrom(error))}finally{hideLoadingIndicator()}
+            // [[[ STEP 4 - Set Resource and Route Stage Status ]]]
+            // In progress when not all quantities are made
+            // Completed when no open quantity remained
+            if(allTasksCompletedForStoppingTheRunningJob) {
+              allTasksCompletedForStoppingTheRunningJob = false
+              try{
+                showLoadingIndicator()
+                const sqlResult = await (await fetch(
+                  uq() + `UpdateStageForProductionOrderLine?p0=${job.DocEntry}&p1=${job.U_LineNum}`
+                )).json()
+                if(sqlResult.errorCode == 0) {
+                  console.log("Update Status",sqlResult.data[0])
+                  allTasksCompletedForStoppingTheRunningJob = true
+                } else showJobQuantitiesError(textFrom(sqlResult))
+              }catch(error){showJobQuantitiesError(textFrom(error))}finally{hideLoadingIndicator()}
+            }
+            // [[[ STEP 5 - Navigate Back to Login Page ]]]
+            if(allTasksCompletedForStoppingTheRunningJob) {
+              $.mobile.changePage("#loginPage")
+            }
+          })
+        }
+      })
+      $(document).on("pageshow", async e => {
+        if(e.target.id === "jobQuantitiesPage") {
+          //Load production order BO to get quantities and other useful information
+          try {
+            showLoadingIndicator()
+            const job = getRunningJobFromLocalStore()
+            const boResult = await (await fetch(bo() + `ProductionOrders/${job.DocEntry}`)).json()
+            if(boResult.errorCode === 0) {
+              // console.log(boResult.bo)
+              //Find job row in production order BO
+              const wor1 = boResult.bo.BOM.BO.WOR1.row.find(r => r.LineNum === job.U_LineNum)
+              // console.log(wor1)
+              const plannedQty = getFloat(boResult.bo.BOM.BO.OWOR.row.PlannedQty)
+              const cmpltQty = getFloat(boResult.bo.BOM.BO.OWOR.row.CmpltQty)
+              const U_CompletedQty = getFloat(wor1.U_CompletedQty)
+              const openQty = plannedQty -  Math.max(cmpltQty,U_CompletedQty) 
+              // console.log(openQty)
+              completedQtyInputNumber.value = openQty
+              rejectedQtyInputNumber.value = null
+              reworkQtyInputNumber.value = null
+              completedQtyDisplayText.textContent = U_CompletedQty
+              reworkQtyDisplayText.textContent = getFloat(wor1.U_ReworkQty)
+              rejectedQtyDisplayText.textContent = getFloat(wor1.U_RejectedQty)
+              hoursInputNumber.value = (minuteDiff(sapDTToDate(job.Recontact,job.BeginTime),new Date())/60).toFixed(2)
+              // const U_ReworkQty = parseFloat(wor1.U_ReworkQty)
+              // console.log(wor1.U_CompletedQty, wor1.U_ReworkQty, parseFloat(wor1.U_RejectedQty))
+              saveProductionOrderToLocalStore(boResult.bo)
+            } else showJobQuantitiesError(textFrom(boResult))
+          } catch(error) {showJobQuantitiesError(textFrom(error))} finally{hideLoadingIndicator()}
+        }
+      })
+    </script>
+  </section>
 
 </body>
 

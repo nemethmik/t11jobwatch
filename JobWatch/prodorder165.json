@@ -1,0 +1,646 @@
+{
+  "statusCode": 200,
+  "errorCode": 0,
+  "errorText": null,
+  "errorStackTrace": null,
+  "found": true,
+  "id": "165",
+  "execMillis": 29,
+  "bo": {
+      "?xml": {
+          "@version": "1.0",
+          "@encoding": "UTF-16"
+      },
+      "BOM": {
+          "BO": {
+              "AdmInfo": {
+                  "Object": "202"
+              },
+              "OWOR": {
+                  "row": {
+                      "DocEntry": "165",
+                      "DocNum": "165",
+                      "Series": "23",
+                      "ItemCode": "P20003",
+                      "Status": "R",
+                      "Type": "S",
+                      "PlannedQty": "23.000000",
+                      "CmpltQty": "0.000000",
+                      "RjctQty": "0.000000",
+                      "PostDate": "20200503",
+                      "DueDate": "20200916",
+                      "OriginAbs": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "OriginNum": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "OriginType": "M",
+                      "UserSign": "8",
+                      "Comments": {
+                          "@nil": "true"
+                      },
+                      "CloseDate": {
+                          "@nil": "true"
+                      },
+                      "RlsDate": "20200506",
+                      "CardCode": {
+                          "@nil": "true"
+                      },
+                      "Warehouse": "01",
+                      "Uom": {
+                          "@nil": "true"
+                      },
+                      "LineDirty": "1",
+                      "JrnlMemo": "Production Order - P20003",
+                      "TransId": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "CreateDate": "20200503",
+                      "Printed": "N",
+                      "OcrCode": {
+                          "@nil": "true"
+                      },
+                      "PIndicator": "Default",
+                      "OcrCode2": {
+                          "@nil": "true"
+                      },
+                      "OcrCode3": {
+                          "@nil": "true"
+                      },
+                      "OcrCode4": {
+                          "@nil": "true"
+                      },
+                      "OcrCode5": {
+                          "@nil": "true"
+                      },
+                      "SeqCode": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "Serial": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "SeriesStr": {
+                          "@nil": "true"
+                      },
+                      "SubStr": {
+                          "@nil": "true"
+                      },
+                      "LogInstanc": "0",
+                      "UserSign2": "1",
+                      "UpdateDate": "20200506",
+                      "Project": {
+                          "@nil": "true"
+                      },
+                      "SupplCode": {
+                          "@nil": "true"
+                      },
+                      "UomEntry": "-1",
+                      "PickRmrk": {
+                          "@nil": "true"
+                      },
+                      "SysCloseDt": {
+                          "@nil": "true"
+                      },
+                      "SysCloseTm": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "CloseVerNm": {
+                          "@nil": "true"
+                      },
+                      "StartDate": "20200810",
+                      "ObjType": "202",
+                      "ProdName": "External HD",
+                      "Priority": "100",
+                      "RouDatCalc": "S",
+                      "UpdAlloc": "M",
+                      "CreateTS": "194553",
+                      "UpdateTS": "193526",
+                      "VersionNum": "10.00.110.01",
+                      "DataSource": "O",
+                      "SAPPassprt": {
+                          "@nil": "true"
+                      },
+                      "AtcEntry": {
+                          "@nil": "true",
+                          "#text": "0"
+                      },
+                      "Attachment": {
+                          "@nil": "true"
+                      },
+                      "AsChild": "N"
+                  }
+              },
+              "WOR1": {
+                  "row": [
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "0",
+                          "ItemCode": "C00012",
+                          "BaseQty": "1.000000",
+                          "PlannedQty": "23.000000",
+                          "IssuedQty": "0.000000",
+                          "IssueType": "M",
+                          "wareHouse": "01",
+                          "VisOrder": "0",
+                          "WipActCode": {
+                              "@nil": "true"
+                          },
+                          "CompTotal": "0.000000",
+                          "OcrCode": {
+                              "@nil": "true"
+                          },
+                          "OcrCode2": {
+                              "@nil": "true"
+                          },
+                          "OcrCode3": {
+                              "@nil": "true"
+                          },
+                          "OcrCode4": {
+                              "@nil": "true"
+                          },
+                          "OcrCode5": {
+                              "@nil": "true"
+                          },
+                          "LocCode": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "LogInstanc": "0",
+                          "Project": {
+                              "@nil": "true"
+                          },
+                          "UomEntry": "-1",
+                          "UomCode": "Manual",
+                          "ItemType": "4",
+                          "AdditQty": "0.000000",
+                          "LineText": {
+                              "@nil": "true"
+                          },
+                          "PickStatus": "N",
+                          "PickQty": "0.000000",
+                          "PickIdNo": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "ReleaseQty": "0.000000",
+                          "ResAlloc": {
+                              "@nil": "true"
+                          },
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "StageId": "1",
+                          "BaseQtyNum": "0.000001",
+                          "BaseQtyDen": "0.000001",
+                          "ReqDays": "0.000000",
+                          "RtCalcProp": "100.000000",
+                          "Status": "P",
+                          "ItemName": "Cabinet for external HD",
+                          "U_CompletedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_ReworkQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_RejectedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          }
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "1",
+                          "ItemCode": "R300005",
+                          "BaseQty": "0.500000",
+                          "PlannedQty": "11.500000",
+                          "IssuedQty": "0.000000",
+                          "IssueType": "M",
+                          "wareHouse": "01",
+                          "VisOrder": "1",
+                          "WipActCode": {
+                              "@nil": "true"
+                          },
+                          "CompTotal": "0.000000",
+                          "OcrCode": {
+                              "@nil": "true"
+                          },
+                          "OcrCode2": {
+                              "@nil": "true"
+                          },
+                          "OcrCode3": {
+                              "@nil": "true"
+                          },
+                          "OcrCode4": {
+                              "@nil": "true"
+                          },
+                          "OcrCode5": {
+                              "@nil": "true"
+                          },
+                          "LocCode": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "LogInstanc": "0",
+                          "Project": {
+                              "@nil": "true"
+                          },
+                          "UomEntry": "0",
+                          "UomCode": {
+                              "@nil": "true"
+                          },
+                          "ItemType": "290",
+                          "AdditQty": "0.000000",
+                          "LineText": {
+                              "@nil": "true"
+                          },
+                          "PickStatus": "N",
+                          "PickQty": "0.000000",
+                          "PickIdNo": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "ReleaseQty": "0.000000",
+                          "ResAlloc": "S",
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "StageId": "1",
+                          "BaseQtyNum": "0.000001",
+                          "BaseQtyDen": "0.000002",
+                          "ReqDays": "0.000000",
+                          "RtCalcProp": "100.000000",
+                          "Status": "P",
+                          "ItemName": "Assembly Machine",
+                          "U_CompletedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_ReworkQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_RejectedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          }
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "2",
+                          "ItemCode": "R300007",
+                          "BaseQty": "0.500000",
+                          "PlannedQty": "11.500000",
+                          "IssuedQty": "0.000000",
+                          "IssueType": "M",
+                          "wareHouse": "01",
+                          "VisOrder": "2",
+                          "WipActCode": {
+                              "@nil": "true"
+                          },
+                          "CompTotal": "0.000000",
+                          "OcrCode": {
+                              "@nil": "true"
+                          },
+                          "OcrCode2": {
+                              "@nil": "true"
+                          },
+                          "OcrCode3": {
+                              "@nil": "true"
+                          },
+                          "OcrCode4": {
+                              "@nil": "true"
+                          },
+                          "OcrCode5": {
+                              "@nil": "true"
+                          },
+                          "LocCode": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "LogInstanc": "0",
+                          "Project": {
+                              "@nil": "true"
+                          },
+                          "UomEntry": "0",
+                          "UomCode": {
+                              "@nil": "true"
+                          },
+                          "ItemType": "290",
+                          "AdditQty": "0.000000",
+                          "LineText": {
+                              "@nil": "true"
+                          },
+                          "PickStatus": "N",
+                          "PickQty": "0.000000",
+                          "PickIdNo": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "ReleaseQty": "0.000000",
+                          "ResAlloc": "S",
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "StageId": "1",
+                          "BaseQtyNum": "0.000001",
+                          "BaseQtyDen": "0.000002",
+                          "ReqDays": "0.000000",
+                          "RtCalcProp": "100.000000",
+                          "Status": "P",
+                          "ItemName": "Junior Technician",
+                          "U_CompletedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_ReworkQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_RejectedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          }
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "3",
+                          "ItemCode": "C00013",
+                          "BaseQty": "1.000000",
+                          "PlannedQty": "23.000000",
+                          "IssuedQty": "0.000000",
+                          "IssueType": "M",
+                          "wareHouse": "01",
+                          "VisOrder": "3",
+                          "WipActCode": {
+                              "@nil": "true"
+                          },
+                          "CompTotal": "0.000000",
+                          "OcrCode": {
+                              "@nil": "true"
+                          },
+                          "OcrCode2": {
+                              "@nil": "true"
+                          },
+                          "OcrCode3": {
+                              "@nil": "true"
+                          },
+                          "OcrCode4": {
+                              "@nil": "true"
+                          },
+                          "OcrCode5": {
+                              "@nil": "true"
+                          },
+                          "LocCode": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "LogInstanc": "0",
+                          "Project": {
+                              "@nil": "true"
+                          },
+                          "UomEntry": "-1",
+                          "UomCode": "Manual",
+                          "ItemType": "4",
+                          "AdditQty": "0.000000",
+                          "LineText": {
+                              "@nil": "true"
+                          },
+                          "PickStatus": "N",
+                          "PickQty": "0.000000",
+                          "PickIdNo": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "ReleaseQty": "0.000000",
+                          "ResAlloc": {
+                              "@nil": "true"
+                          },
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "StageId": "2",
+                          "BaseQtyNum": "0.000001",
+                          "BaseQtyDen": "0.000001",
+                          "ReqDays": "0.000000",
+                          "RtCalcProp": "100.000000",
+                          "Status": "P",
+                          "ItemName": "1 TB disk for external HD",
+                          "U_CompletedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_ReworkQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_RejectedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          }
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "4",
+                          "ItemCode": "R300005",
+                          "BaseQty": "1.250000",
+                          "PlannedQty": "28.750000",
+                          "IssuedQty": "0.000000",
+                          "IssueType": "M",
+                          "wareHouse": "01",
+                          "VisOrder": "4",
+                          "WipActCode": {
+                              "@nil": "true"
+                          },
+                          "CompTotal": "0.000000",
+                          "OcrCode": {
+                              "@nil": "true"
+                          },
+                          "OcrCode2": {
+                              "@nil": "true"
+                          },
+                          "OcrCode3": {
+                              "@nil": "true"
+                          },
+                          "OcrCode4": {
+                              "@nil": "true"
+                          },
+                          "OcrCode5": {
+                              "@nil": "true"
+                          },
+                          "LocCode": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "LogInstanc": "0",
+                          "Project": {
+                              "@nil": "true"
+                          },
+                          "UomEntry": "0",
+                          "UomCode": {
+                              "@nil": "true"
+                          },
+                          "ItemType": "290",
+                          "AdditQty": "0.000000",
+                          "LineText": {
+                              "@nil": "true"
+                          },
+                          "PickStatus": "N",
+                          "PickQty": "0.000000",
+                          "PickIdNo": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "ReleaseQty": "0.000000",
+                          "ResAlloc": "S",
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "StageId": "2",
+                          "BaseQtyNum": "0.000005",
+                          "BaseQtyDen": "0.000004",
+                          "ReqDays": "0.000000",
+                          "RtCalcProp": "100.000000",
+                          "Status": "P",
+                          "ItemName": "Assembly Machine",
+                          "U_CompletedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_ReworkQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_RejectedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          }
+                      },
+                      {
+                          "DocEntry": "165",
+                          "LineNum": "5",
+                          "ItemCode": "R300006",
+                          "BaseQty": "1.250000",
+                          "PlannedQty": "28.750000",
+                          "IssuedQty": "0.000000",
+                          "IssueType": "B",
+                          "wareHouse": "01",
+                          "VisOrder": "5",
+                          "WipActCode": {
+                              "@nil": "true"
+                          },
+                          "CompTotal": "0.000000",
+                          "OcrCode": {
+                              "@nil": "true"
+                          },
+                          "OcrCode2": {
+                              "@nil": "true"
+                          },
+                          "OcrCode3": {
+                              "@nil": "true"
+                          },
+                          "OcrCode4": {
+                              "@nil": "true"
+                          },
+                          "OcrCode5": {
+                              "@nil": "true"
+                          },
+                          "LocCode": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "LogInstanc": "0",
+                          "Project": {
+                              "@nil": "true"
+                          },
+                          "UomEntry": "0",
+                          "UomCode": {
+                              "@nil": "true"
+                          },
+                          "ItemType": "290",
+                          "AdditQty": "0.000000",
+                          "LineText": {
+                              "@nil": "true"
+                          },
+                          "PickStatus": "N",
+                          "PickQty": "0.000000",
+                          "PickIdNo": {
+                              "@nil": "true",
+                              "#text": "0"
+                          },
+                          "ReleaseQty": "0.000000",
+                          "ResAlloc": "S",
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "StageId": "2",
+                          "BaseQtyNum": "0.000005",
+                          "BaseQtyDen": "0.000004",
+                          "ReqDays": "0.000000",
+                          "RtCalcProp": "100.000000",
+                          "Status": "P",
+                          "ItemName": "Senior Technician",
+                          "U_CompletedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_ReworkQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          },
+                          "U_RejectedQty": {
+                              "@nil": "true",
+                              "#text": "0.000000"
+                          }
+                      }
+                  ]
+              },
+              "WOR4": {
+                  "row": [
+                      {
+                          "DocEntry": "165",
+                          "StageId": "1",
+                          "SeqNum": "1",
+                          "StgEntry": "1",
+                          "Name": "Cabinet Assembly",
+                          "LogInstanc": "0",
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "Status": "P",
+                          "RtCalcProp": "100.000000",
+                          "ReqDays": "0.000000",
+                          "WaitDays": "0.000000"
+                      },
+                      {
+                          "DocEntry": "165",
+                          "StageId": "2",
+                          "SeqNum": "2",
+                          "StgEntry": "2",
+                          "Name": "Disk Assembly",
+                          "LogInstanc": "0",
+                          "StartDate": "20200810",
+                          "EndDate": "20200916",
+                          "Status": "P",
+                          "RtCalcProp": "100.000000",
+                          "ReqDays": "0.000000",
+                          "WaitDays": "0.000000"
+                      }
+                  ]
+              }
+          }
+      }
+  },
+  "rawXml": null,
+  "xmlSchema": null,
+  "connection": {
+      "Profile": "MikiTest",
+      "CompanyDB": "SBODemoUS",
+      "Server": "MIKISURFACE",
+      "DbUserName": "SQLBroker",
+      "UserName": "linda",
+      "DbServerType": "MSSQL2016",
+      "AdoNetUser": "SQLBroker"
+  }
+}

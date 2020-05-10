@@ -1,0 +1,152 @@
+{
+  "statusCode": 200,
+  "errorCode": 0,
+  "errorText": null,
+  "errorStackTrace": null,
+  "found": true,
+  "id": "15",
+  "execMillis": 2528,
+  "bo": {
+      "?xml": {
+          "@version": "1.0",
+          "@encoding": "UTF-16"
+      },
+      "Activity": {
+          "ActivityCode": "15",
+          "CardCode": "",
+          "Notes": {
+              "@nil": "true"
+          },
+          "ActivityDate": "2020-05-07",
+          "ActivityTime": "16:23:00",
+          "StartDate": "2020-05-07",
+          "Closed": "tNO",
+          "CloseDate": {
+              "@nil": "true"
+          },
+          "Phone": {
+              "@nil": "true"
+          },
+          "Fax": {
+              "@nil": "true"
+          },
+          "Subject": "-1",
+          "DocType": "202",
+          "DocNum": "155",
+          "DocEntry": "155",
+          "Priority": "pr_Normal",
+          "Details": "Operation Started for operation 155-4",
+          "Activity": "cn_Task",
+          "ActivityType": "-1",
+          "Location": "-1",
+          "StartTime": "16:23:00",
+          "EndTime": "16:38:00",
+          "Duration": "900.000000",
+          "DurationType": "du_Seconds",
+          "SalesEmployee": "-1",
+          "ContactPersonCode": {
+              "@nil": "true"
+          },
+          "HandledBy": "22",
+          "Reminder": "tNO",
+          "ReminderPeriod": "15.000000",
+          "ReminderType": "du_Minuts",
+          "City": {
+              "@nil": "true"
+          },
+          "PersonalFlag": "tNO",
+          "Street": {
+              "@nil": "true"
+          },
+          "ParentObjectId": {
+              "@nil": "true"
+          },
+          "ParentObjectType": {
+              "@nil": "true"
+          },
+          "Room": {
+              "@nil": "true"
+          },
+          "InactiveFlag": "tNO",
+          "State": {
+              "@nil": "true"
+          },
+          "PreviousActivity": {
+              "@nil": "true"
+          },
+          "Country": {
+              "@nil": "true"
+          },
+          "Status": "1",
+          "TentativeFlag": "tNO",
+          "EndDueDate": "2020-05-07",
+          "DocTypeEx": "202",
+          "AttachmentEntry": {
+              "@nil": "true"
+          },
+          "RecurrencePattern": "rpNone",
+          "EndType": "etNoEndDate",
+          "SeriesStartDate": "2020-05-07",
+          "SeriesEndDate": {
+              "@nil": "true"
+          },
+          "MaxOccurrence": {
+              "@nil": "true"
+          },
+          "Interval": "1",
+          "Sunday": "tNO",
+          "Monday": "tNO",
+          "Tuesday": "tNO",
+          "Wednesday": "tNO",
+          "Thursday": "tNO",
+          "Friday": "tNO",
+          "Saturday": "tNO",
+          "RepeatOption": "roByDate",
+          "BelongedSeriesNum": {
+              "@nil": "true"
+          },
+          "IsRemoved": "tNO",
+          "AddressName": {
+              "@nil": "true"
+          },
+          "AddressType": "bo_ShipTo",
+          "HandledByEmployee": {
+              "@nil": "true"
+          },
+          "RecurrenceSequenceSpecifier": {
+              "@nil": "true"
+          },
+          "RecurrenceDayInMonth": {
+              "@nil": "true"
+          },
+          "RecurrenceMonth": {
+              "@nil": "true"
+          },
+          "RecurrenceDayOfWeek": {
+              "@nil": "true"
+          },
+          "SalesOpportunityId": {
+              "@nil": "true"
+          },
+          "SalesOpportunityLine": {
+              "@nil": "true"
+          },
+          "HandledByRecipientList": {
+              "@nil": "true"
+          },
+          "U_LineNum": "5",
+          "CheckInListParams": null
+      }
+  },
+  "rawXml": null,
+  "xmlSchema": null,
+  "connection": {
+      "Profile": "MikiTest",
+      "CompanyDB": "SBODemoUS",
+      "Server": "MIKISURFACE",
+      "DbUserName": "SQLBroker",
+      "UserName": "linda",
+      "DbServerType": "MSSQL2016",
+      "AdoNetUser": "SQLBroker"
+  }
+}
