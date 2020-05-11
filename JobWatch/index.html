@@ -10,7 +10,7 @@
   <!-- <link rel="stylesheet" href="./jquery/jquery.mobile-1.4.5.css"> -->
   <link rel="stylesheet" href="./jquery/jquery.mobile.structure-1.4.5.css">
   <link rel="shortcut icon" href="./jquery/demos/favicon.ico">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700"> -->
   <script src="./jquery/demos/js/jquery.js"></script>
   <!-- <script src="./jquery/demos/_assets/js/index.js"></script> -->
   <script>
@@ -69,6 +69,9 @@
             </div>
           </div>
         </div>
+        <div class="ui-block-a">
+          <p style="text-align: center;">1.0.2 (20200511)</p>
+        </div>
       </div>
     </main>
     <footer data-role="footer" data-position="fixed">
@@ -76,30 +79,48 @@
         <a href="#" data-direction="reverse"
           class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-b">Exit</a>
         <a id="configDoneButton" href="#loginPage" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-b">Done</a>
-        <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
+        <a id="configMoreButton" href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-ellipsis-v ui-btn-b">More</a>
       </div>
     </footer>
     <script>
+      function showConfigError(text) {
+        configErrorDisplayText.textContent = text ? text : "No Error"
+        $("#configErrorPanel").panel("open")
+      }
       //console.log("Reloaded on " + Date.now())
       //pageinit event is only JQuery event
-      $(document).one("pageinit", async e => {
+      $(document).one("pageinit", e => {
         if(e.target.id === "configPage") {
-          configDoneButton.addEventListener("click", async e => {
+          configDoneButton.addEventListener("click", e => {
             e.preventDefault()
             saveServiceURLToLocalStore(httpInputRadio.checked,hostNameInputText.value,portInputNumber.value,serviceNameInputText.value)
-            try {
-              // let response = await SQLBroker("select top 1 ItemCode from OITM")
-              let response = await userQuery("TestConnection")
-              //console.log(response.data[0].ItemCode)
-              //configErrorDisplayText.textContent = response.data[0].ItemCode
+            sqlBrokerUQ(null,"TestConnection",null,function(sqlResult){
               $.mobile.changePage("#loginPage")
-            } catch(error) {
-              const msg = textFrom(error)
-              configErrorDisplayText.textContent = msg ? msg : "Empty"
-              $("#configErrorPanel").panel("open")
-              console.log(error);
-            }
+            }, showConfigError,globalTimeout())
           })
+          $("#configMoreButton").click(function(e) {
+            e.preventDefault()
+            saveServiceURLToLocalStore(httpInputRadio.checked,hostNameInputText.value,portInputNumber.value,serviceNameInputText.value)
+            getProductionOrderSQL()
+            //getProductionOrderBO()
+          })
+          function getProductionOrderSQL() {
+            sqlBrokerSQL(null,`select l.*
+              -- w.DocEntry, w.DocNum, l.LineNum, l.VisOrder, l.StageId, l.ItemCode 
+              from OWOR w join WOR1 l on l.DocEntry = w.DocEntry 
+              where w.DocEntry = 162`,function(sqlResult) {
+                if(sqlResult.data && sqlResult.data.length > 0) {
+                  showConfigError("Production Order received")
+                }
+              }, showConfigError,globalTimeout())
+          }
+          function getProductionOrderBO() {
+            sqlBrokerGetBO(null,"ProductionOrders",162,function(boResult) {
+                if(boResult.bo) {
+                  showConfigError("Production Order received")
+                }
+              }, showConfigError,globalTimeout())
+          }
         }
       })
     </script>
@@ -152,55 +173,40 @@
       </div>
     </footer>
     <script>
+      $(document).on("pagebeforeshow", e => {
+        loginUserNameDisplayText.textContent = ""
+      })
       function showLoginError(text) {
         loginErrorDisplayText.textContent = text
         $("#loginErrorPanel").panel("open")
       }
-      $(document).on("pageinit", async e => {
+      $(document).on("pageinit", e => {
         if(e.target.id === "loginPage") {
-          loginButton.addEventListener("click", async e => {
+          loginButton.addEventListener("click", e => {
             e.preventDefault()
-            try {
-              // let response = await SQLBroker(
-              //   `select Code,e.userId,lastName,firstName 
-              //   from OHEM e left outer join OUSR u on e.userId = u.USERID  
-              //   where u.USER_CODE = '${user.value}' 
-              //   -- or Code = '${user.value}'`)
-              let response = await userQuery("QueryEmployeeByUserCode",userCodeInputText.value)
-              if(response.data.length) {
-                saveUserToLocalStore(response.data[0])
-                loginUserNameDisplayText.textContent = "Hello " + response.data[0].lastName + ", " + response.data[0].firstName 
-                try {
-                  showLoadingIndicator()
-                  // await sleepAsync(2000)
-                  const userCode = response.data[0].USER_CODE
-                  const r = await fetch(uq() + `QueryRunningJobsForUser?p0=${userCode}`)
-                  const sqlResult = await r.json()
-                  console.log(sqlResult)
-                  if(sqlResult.errorCode === 0) {
-                    if(sqlResult.data && sqlResult.data.length > 0) {
-                      //User has runnig job, so, show running job page
-                      //Even if she has multiple running jobs we show only the first one.
-                      //This application supports only-one-at-a-time running job concept
-                      saveRunningJobToLocalStore(sqlResult.data[0])
-                      $.mobile.changePage("#runningJobPage")      
-                    } else {
-                      //No running job show resources to pick one for starting operation
-                      $.mobile.changePage("#resourcesPage")      
-                    }
-                  } else {
-                    showLoginError(textFrom(sqlResult))
-                  }
-                } catch(error) {
-                  showLoginError(textFrom(sqlResult))
-                } finally {hideLoadingIndicator()}                
-              } else {
-                showLoginError(`Invalid user code ${userCodeInputText.value}`)
-              }
-            } catch(error) {
-                showLoginError(textFrom(error))
-                console.log(error);
-              }
+            sqlBrokerUQ(null,"QueryEmployeeByUserCode","p0=" + userCodeInputText.value,
+              function(sqlResult){
+                if(sqlResult.data.length) {
+                  saveUserToLocalStore(sqlResult.data[0])
+                  loginUserNameDisplayText.textContent = "Hello " + sqlResult.data[0].lastName + ", " + sqlResult.data[0].firstName
+                  const userCode = sqlResult.data[0].USER_CODE
+                  sqlBrokerUQ(null,"QueryRunningJobsForUser","p0=" + userCode,
+                    function(sqlResult){
+                      if(sqlResult.data && sqlResult.data.length > 0) {
+                        //User has runnig job, so, show running job page
+                        //Even if she has multiple running jobs we show only the first one.
+                        //This application supports only-one-at-a-time running job concept
+                        saveRunningJobToLocalStore(sqlResult.data[0])
+                        $.mobile.changePage("#runningJobPage")      
+                      } else {
+                        //No running job show resources to pick one for starting operation
+                        $.mobile.changePage("#resourcesPage")      
+                      }                  
+                    }, showLoginError,globalTimeout())
+                } else {
+                  showLoginError(`Invalid user code ${userCodeInputText.value}`)
+                }
+              }, showLoginError,globalTimeout())
             }
           )
         }
@@ -238,26 +244,29 @@
       </div>
     </footer>
     <script>
-      async function queryAndShowResourcesAsync() {
-        const userDetails = getUserDetailsFromLocalStore()
-        try {
-          const response = await userQuery("QueryResourcesForUser",userDetails.USER_CODE)
-          const htmlText = response.data.reduce((a,r)=> a += `
-          <li data-icon="${resIcon(r.ResType)}">
-            <a href="#startJobPage" data-rescode="${r.ResCode}">${r.ResName}<span class="ui-li-count">${r.OpenJobs}</span></a>
-          </li>`,"")
-          $("#resourcesListView").html(htmlText).listview("refresh")
-        } catch(error) {
-          resourcesErrorDisplayText.textContent = textFrom(error)
+      function showResourcesError(text) {
+        resourcesErrorDisplayText.textContent = text
           $("#resourcesErrorPanel").panel("open")
-        }
+      }
+      function queryAndShowResourcesAsync() {
+        const userDetails = getUserDetailsFromLocalStore()
+        sqlBrokerUQ(null,"QueryResourcesForUser","p0=" + userDetails.USER_CODE,
+          function(sqlResult){
+            if(sqlResult.data && sqlResult.data.length > 0) {
+              const htmlText = sqlResult.data.reduce((a,r)=> a += `
+              <li data-icon="${resIcon(r.ResType)}">
+                <a href="#startJobPage" data-rescode="${r.ResCode}">${r.ResName}<span class="ui-li-count">${r.OpenJobs}</span></a>
+              </li>`,"")
+              $("#resourcesListView").html(htmlText).listview("refresh")
+            }                  
+          }, showResourcesError,globalTimeout())
       }
       $(document).on("pagebeforeshow", e => {
         if(e.target.id === "resourcesPage") {
-          queryAndShowResourcesAsync() // No need to call this here with await
+          queryAndShowResourcesAsync() 
         }        
       })
-      $(document).on("pageinit", async e => {
+      $(document).on("pageinit", e => {
         if(e.target.id === "resourcesPage") {
           $("#resourcesListView").click(e => {
             //e.preventDefault()
@@ -338,7 +347,7 @@
                 <a href="#runningJobPage" data-docentry="${r.DocEntry}" data-linenum="${r.LineNum}">
                   <h2 data-docentry="${r.DocEntry}" data-linenum="${r.LineNum}" >${r.Name}</h2><span class="ui-li-count">${parseFloat(r.OpenQty)}</span>
                   <p><strong>${r.ProdName}</strong></p>
-                  <p class="ui-li-aside"><strong>${r.DocNum}-${r.VisOrder} (${formatTime(r.BeginTime)})</strong></p>
+                  <p class="ui-li-aside"><strong>${r.DocNum}/${r.SeqNum}/${r.VisOrder} (${formatTime(r.BeginTime)})</strong></p>
                 </a>
               </li>
               `
@@ -349,25 +358,17 @@
       function queryOpenJobsToStartForUserAndResource() {
         const userDetails = getUserDetailsFromLocalStore()
         const resCode = getResCodeFromLocalStore()
-        const url = encodeURI(uq() + `QueryOpenJobsToStartForUserAndResource?p0=${resCode}&p1=${userDetails.USER_CODE}`)
-        console.log(url)
-        showLoadingIndicator()
-        fetch(url).then(r => r.json()).then(async sqlResult => {
-          //console.log(sqlResult)
-          if(sqlResult.errorCode == 0) {
-            await sleepAsync(500) //For making fun only
+        sqlBrokerUQ(null,"QueryOpenJobsToStartForUserAndResource",`p0=${resCode}&p1=${userDetails.USER_CODE}`,
+          function(sqlResult) {
             showOpenJobsToStart(sqlResult.data)
-          } else {
-            showStartJobError(sqlResult.errorText)
-          }
-        }).finally(hideLoadingIndicator)
+          },showStartJobError)
       }
-      $(document).on("pageshow", async e => {
+      $(document).on("pageshow", e => {
         if(e.target.id === "startJobPage") {
-         queryOpenJobsToStartForUserAndResource()
+          queryOpenJobsToStartForUserAndResource()
         }        
       })
-      $(document).on("pagebeforeshow", async e => {
+      $(document).on("pagebeforeshow", e => {
         if(e.target.id === "startJobPage") {
           $("#openJobsListView").html("").listview("refresh")
         }        
@@ -375,59 +376,42 @@
       $(document).on("pageinit", e => {
         if(e.target.id === "startJobPage") {
           $("#openJobsListView").click(e => {
-            //Since this handler is executed asynchronously we have to prevent default navigation
+            //Since this handler is executed non-blocking we have to prevent default navigation
             //When all are OK, manually move to the next page.
             e.preventDefault()
+            let target = e.target 
+            if(!target.dataset.docentry) {
+              target = $(e.target).closest("a")
+              if(target.length) {target = target[0]}
+            }
             const op = {
-              DocEntry: e.target.dataset.docentry,
-              LineNum: e.target.dataset.linenum,
+              DocEntry: target.dataset.docentry,
+              LineNum: target.dataset.linenum,
             }
             const ud = getUserDetailsFromLocalStore()
             //console.log(op)
             if(op.DocEntry && op.LineNum) {
               saveOperationDetailsToLocalStore(op)
-              //Query, if operation can be started by the user as a last check and verification
-              showLoadingIndicator()
-              const url = uq() + `CanUserStartOperation?p0=${ud.USER_CODE}&p1=${op.LineNum}&p2=${op.DocEntry}`
-              //console.log(url)
-              //Don't place url into curly braces, fetch goes crazy
-              fetch(url).then(r => r.json()).then(sqlResult => {
-                  if(sqlResult.errorCode == 0) {
-                    if(sqlResult.data && sqlResult.data.length > 0) {
-                      console.log(`Yes, ${ud.USER_CODE} can start operation ${op.DocEntry}-${op.LineNum}`, sqlResult.data)
-                      return sqlResult.data
-                    } else {
-                      throw new Error(`User ${ud.USER_CODE} cannot start job ${op.DocEntry}-${op.LineNum}. Maybe the completed has reached planned qty`)
-                    }
-                  } else {
-                    showStartJobError(sqlResult.errorText)
-                  }
-                }).then(data => {
-                  if(data && data.length > 0) {
-                    console.log("Create an activity for the start operation using BO/Activity", data[0])
-                    const act = newActivity(null, data[0].DocEntry
-                      ,`Operation ${data[0].DocEntry}-${data[0].LineNum} started for ${data[0].USERID}`
-                      ,2 * 60 * 60,data[0].USERID,1,data[0].LineNum) // 1 is a user defined code for started
-                    console.log(act)
-                    fetch(bo() + "Activity",{method:"POST",body:JSON.stringify(act),
-                      headers:{"Content-Type":"application/json"}
-                      }).then(r=>r.json()).then(boResult=>{
-                      if(boResult.errorCode === 0) {
-                        console.log(boResult)
+              sqlBrokerUQ(null,"CanUserStartOperation",`p0=${ud.USER_CODE}&p1=${op.LineNum}&p2=${op.DocEntry}`,
+                function (sqlResult) {
+                  if(sqlResult.data && sqlResult.data.length > 0) {
+                    console.log(`Yes, ${ud.USER_CODE} can start operation ${op.DocEntry}-${op.LineNum}`, sqlResult.data)
+                    console.log("Create an activity for the start operation using BO/Activity", sqlResult.data[0])
+                    const act = newActivity(null, sqlResult.data[0].DocEntry
+                      ,`Operation ${sqlResult.data[0].DocEntry}-${sqlResult.data[0].LineNum} started for ${sqlResult.data[0].USERID}`
+                      ,2 * 60 * 60,sqlResult.data[0].USERID,1,sqlResult.data[0].LineNum) // 1 is a user defined code for Activity Started
+                    sqlBrokerPostBO(null,"Activity", act, function(boResult) {
                         //Go back to the login page, it's meaningless to go to the 
                         //running job page, when she logs in again, and if she
                         //has running job the control jumps from login to the
                         //running job page right away
                         $.mobile.changePage("#loginPage")
-                      } else {
-                        showStartJobError(textFrom(boResult))
-                      }
-                    })
+                    }, showStartJobError,globalTimeout())
+                  } else {
+                    showStartJobError(`User ${ud.USER_CODE} cannot start job ${op.DocEntry}-${op.LineNum}. Maybe the completed qty has reached planned qty.`)
                   }
-                }).catch(error => {
-                  console.log(error)
-                  showStartJobError(textFrom(error))
-                }).finally(hideLoadingIndicator)
+                },showStartJobError,globalTimeout()
+              )
             } else {
               showStartJobError("Click on the gear in the list")
             }
@@ -444,20 +428,25 @@
     </header>
     <main role="main" class="ui-content">
       <div class="ui-grid-a">
-        <div class="ui-block-a">
-          <h2 id="operationNameDisplayText">Dry Hanging</h2><strong id="openQtyDisplayText">[4500]</strong>
-          <p><strong id="productNameDisplayText">Red Bike BXP 75</strong></p>
-          <p class="ui-li-aside"><strong id="operationIDDisplayText">35478-12 (6:24)</strong></p>
+        <div class="ui-block-a ui-body-b">
+          <h2 id="operationNameDisplayText" style="text-align: center;">Dry Hanging</h2>
+          <p style="text-align: center;" id="openQtyDisplayText">[4500]</p>
+          <p style="text-align: center;"><strong id="productNameDisplayText">Red Bike BXP 75</strong></p>
+          <p style="text-align: center;" class="ui-li-aside ui-body-c"><strong id="operationIDDisplayText">35478-12 (6:24)</strong></p>
+          <p style="text-align: center;" id="resourceCodeAndNameDisplayText">Senior Technician (R300005)</p>
         </div>
         <div class="ui-block-b">
           <div class="ui-grid-solo">
             <div class="ui-block-a">
-              <h2>Started</h2>
-              <h2 id="starttime">08:05:23</h2>
+              <h2 style="text-align: center;">Started</h2>
+              <h2 id="starttime" style="text-align: center;">08:05:23</h2>
+            </div>
+            <div class="ui-block-a ui-body-a">
+              <h2 style="text-align: center;">Running</h2>
+              <h2 id="runningtime" style="text-align: center;">02:15:52</h2>
             </div>
             <div class="ui-block-a">
-              <h2>Running</h2>
-              <h2 id="runningtime">02:15:52</h2>
+              <p style="text-align: center;" id="routStageStatusDisplayText">Planned</p>
             </div>
           </div>
         </div>
@@ -476,13 +465,15 @@
       $(document).on("pagebeforeshow", e => {
         if(e.target.id === "runningJobPage") {
           const job = getRunningJobFromLocalStore()
+          resourceCodeAndNameDisplayText.textContent = `${job.ItemName} (${job.ItemCode})`
+          routStageStatusDisplayText.textContent = (job.Status === "I" ? "In Progress" : (job.Status === "C" ? "Completed" : "Planned"))
           operationNameDisplayText.textContent = job.RSName ? job.RSName : job.ItemName
           openQtyDisplayText.textContent = `[ ${parseInt(job.OpenQty)} ]`
           productNameDisplayText.textContent = job.ProdName
-          operationIDDisplayText.textContent = `${job.DocNum}-${job.VisOrder}`
+          operationIDDisplayText.textContent = `${job.DocNum} / ${job.SeqNum} / ${job.VisOrder}`
           starttime.textContent = formatTime(job.BeginTime)
           const runningMinutes = minuteDiff(sapDTToDate(job.Recontact,job.BeginTime),new Date())
-          runningtime.textContent = formatMinDiff(runningMinutes) + ` (${runningMinutes/60}h)`
+          runningtime.textContent = formatMinDiff(runningMinutes) + ` (${(runningMinutes/60).toFixed(2)}h)`
         }
       })
       /*
@@ -553,7 +544,7 @@
       }
       $(document).on("pageinit", e => {
         if(e.target.id === "jobQuantitiesPage") {
-          jobQuantitiesDoneButton.addEventListener("click", async e => {
+          jobQuantitiesDoneButton.addEventListener("click", e => {
             e.preventDefault()
             // console.log(e.target.id)
             const po = getProductionOrderFromLocalStore()
@@ -594,69 +585,44 @@
             const actToUpdate = makeActivityObjectForUpdate(null, job.ClgCode, runningMinutes * 60, "-3") //Close
             addBoReqToMR(mReq,"PUT","Activity",actToUpdate,job.ClgCode)//TODO: UNCOMMENT ME
             console.log("Multi-Request",mReq)
-            let allTasksCompletedForStoppingTheRunningJob = false
-            try{
-              showLoadingIndicator()
-              const boResult = await (await fetch(mr(), //Multi-Requests are always with POST 
-                { method:"POST", body:JSON.stringify(mReq),
-                headers:{"Content-Type":"application/json"}})).json()
-              if(boResult.errorCode === 0) {
-                console.log("Running Job Stopped Successfully", boResult)
-                allTasksCompletedForStoppingTheRunningJob = true
-              } else showJobQuantitiesError(textFrom(boResult))
-            }catch(error){showJobQuantitiesError(textFrom(error))}finally{hideLoadingIndicator()}
-            // [[[ STEP 4 - Set Resource and Route Stage Status ]]]
-            // In progress when not all quantities are made
-            // Completed when no open quantity remained
-            if(allTasksCompletedForStoppingTheRunningJob) {
-              allTasksCompletedForStoppingTheRunningJob = false
-              try{
-                showLoadingIndicator()
-                const sqlResult = await (await fetch(
-                  uq() + `UpdateStageForProductionOrderLine?p0=${job.DocEntry}&p1=${job.U_LineNum}`
-                )).json()
-                if(sqlResult.errorCode == 0) {
+            sqlBrokerMultiReq(null,mReq, function(mrResult){
+                console.log("Running Job Stopped Successfully", mrResult)
+                sqlBrokerUQ(null,"UpdateStageForProductionOrderLine",`p0=${job.DocEntry}&p1=${job.U_LineNum}`,
+                function(sqlResult) {
                   console.log("Update Status",sqlResult.data[0])
-                  allTasksCompletedForStoppingTheRunningJob = true
-                } else showJobQuantitiesError(textFrom(sqlResult))
-              }catch(error){showJobQuantitiesError(textFrom(error))}finally{hideLoadingIndicator()}
-            }
-            // [[[ STEP 5 - Navigate Back to Login Page ]]]
-            if(allTasksCompletedForStoppingTheRunningJob) {
-              $.mobile.changePage("#loginPage")
-            }
+                  $.mobile.changePage("#loginPage")
+                }, showJobQuantitiesError,globalTimeout())
+              }, showJobQuantitiesError,globalTimeout() * 2)
           })
         }
       })
-      $(document).on("pageshow", async e => {
+      $(document).on("pageshow", e => {
         if(e.target.id === "jobQuantitiesPage") {
           //Load production order BO to get quantities and other useful information
-          try {
-            showLoadingIndicator()
-            const job = getRunningJobFromLocalStore()
-            const boResult = await (await fetch(bo() + `ProductionOrders/${job.DocEntry}`)).json()
-            if(boResult.errorCode === 0) {
-              // console.log(boResult.bo)
-              //Find job row in production order BO
-              const wor1 = boResult.bo.BOM.BO.WOR1.row.find(r => r.LineNum === job.U_LineNum)
-              // console.log(wor1)
-              const plannedQty = getFloat(boResult.bo.BOM.BO.OWOR.row.PlannedQty)
-              const cmpltQty = getFloat(boResult.bo.BOM.BO.OWOR.row.CmpltQty)
-              const U_CompletedQty = getFloat(wor1.U_CompletedQty)
-              const openQty = plannedQty -  Math.max(cmpltQty,U_CompletedQty) 
-              // console.log(openQty)
-              completedQtyInputNumber.value = openQty
-              rejectedQtyInputNumber.value = null
-              reworkQtyInputNumber.value = null
-              completedQtyDisplayText.textContent = U_CompletedQty
-              reworkQtyDisplayText.textContent = getFloat(wor1.U_ReworkQty)
-              rejectedQtyDisplayText.textContent = getFloat(wor1.U_RejectedQty)
-              hoursInputNumber.value = (minuteDiff(sapDTToDate(job.Recontact,job.BeginTime),new Date())/60).toFixed(2)
-              // const U_ReworkQty = parseFloat(wor1.U_ReworkQty)
-              // console.log(wor1.U_CompletedQty, wor1.U_ReworkQty, parseFloat(wor1.U_RejectedQty))
-              saveProductionOrderToLocalStore(boResult.bo)
-            } else showJobQuantitiesError(textFrom(boResult))
-          } catch(error) {showJobQuantitiesError(textFrom(error))} finally{hideLoadingIndicator()}
+          showLoadingIndicator()
+          const job = getRunningJobFromLocalStore()
+          sqlBrokerGetBO(null,"ProductionOrders",job.DocEntry,
+          function (boResult) {
+            // console.log(boResult.bo)
+            //Find job row in production order BO
+            const wor1 = boResult.bo.BOM.BO.WOR1.row.find(r => r.LineNum === job.U_LineNum)
+            // console.log(wor1)
+            const plannedQty = getFloat(boResult.bo.BOM.BO.OWOR.row.PlannedQty)
+            const cmpltQty = getFloat(boResult.bo.BOM.BO.OWOR.row.CmpltQty)
+            const U_CompletedQty = getFloat(wor1.U_CompletedQty)
+            const openQty = plannedQty -  Math.max(cmpltQty,U_CompletedQty) 
+            // console.log(openQty)
+            completedQtyInputNumber.value = openQty
+            rejectedQtyInputNumber.value = null
+            reworkQtyInputNumber.value = null
+            completedQtyDisplayText.textContent = U_CompletedQty
+            reworkQtyDisplayText.textContent = getFloat(wor1.U_ReworkQty)
+            rejectedQtyDisplayText.textContent = getFloat(wor1.U_RejectedQty)
+            hoursInputNumber.value = (minuteDiff(sapDTToDate(job.Recontact,job.BeginTime),new Date())/60).toFixed(2)
+            // const U_ReworkQty = parseFloat(wor1.U_ReworkQty)
+            // console.log(wor1.U_CompletedQty, wor1.U_ReworkQty, parseFloat(wor1.U_RejectedQty))
+            saveProductionOrderToLocalStore(boResult.bo)
+          }, showJobQuantitiesError,globalTimeout())
         }
       })
     </script>

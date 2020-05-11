@@ -1,6 +1,7 @@
 /*
 main.js shouldn't have any reference to IDs of the HTML pages
 */
+function globalTimeout() {return 10000}
 function deleteAllPropsExcept(obj,keepProps) {
     for(const k in obj) {
         if(!keepProps.includes(k) && obj.hasOwnProperty(k)) delete obj[k]
@@ -40,8 +41,10 @@ function minuteDiff(date1,date2) {
     return Math.ceil(diffMillis/(1000 * 60))
 }
 function formatMinDiff(minutes) {
-    const quot = Math.floor(minutes/60)
-    const rem = minutes % 60
+    let quot = "0" + Math.floor(minutes/60)
+    quot = quot.substring(quot.length - 2,quot.length) 
+    let rem = "0"+ minutes % 60
+    rem = rem.substring(rem.length - 2,rem.length) 
     return `${quot}:${rem}` 
 }
 function sapDTToDate(dateStr,timeStr) {
@@ -65,11 +68,11 @@ function textFrom(error) {
     } else return "" + error
 }
 
-function showLoadingIndicator(text = "Loading ...") {
-    // console.log("show indicator")
+function showLoadingIndicator(text) {
+    if(!text) text = "Loading ..."
     $.mobile.loading("show", { text, textVisible: true, theme: "b" })
 }
-function hideLoadingIndicator(text = "Loading ...") {
+function hideLoadingIndicator() {
     // console.log("hide indicator")
     $.mobile.loading("hide")
 }
@@ -79,7 +82,7 @@ function saveServiceURLToLocalStore(bHttp,sHostName,nPort,sServiceName) {
     let url = (bHttp ? "http" : "https") + "://"
     url += sHostName + ":" + nPort + "/"
     url += sServiceName + "/api/"
-    console.log(url)
+    console.log("sqlbroker",url)
     localStorage.setItem("sqlbroker", url)
 }
 function sql() { return localStorage.getItem("sqlbroker") + "SQL" }
@@ -87,57 +90,134 @@ function bo() { return localStorage.getItem("sqlbroker") + "BO/" }
 function uq() { return localStorage.getItem("sqlbroker") + "UQ/JobWatch/" }
 function mr() { return localStorage.getItem("sqlbroker") + "MR/" }
 
-async function SQLBroker(SQL) {
-    try {
-        showLoadingIndicator()
-        return await $.ajax({
-            url: sql(), type: "POST", dataType: "json",
-            contentType: "application/json", processData: false,
-            data: JSON.stringify({ SQL })
-        })
-    } finally {
-        hideLoadingIndicator()
-    }
-}
-async function userQuery(name, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9) {
-    try {
-        // console.log("Show loading indicator for " + name)
-        showLoadingIndicator()
-        // This jQuery get had some issues, so I changed over to fetch
-        // return await $.get(uq() + name, { p0, p1, p2, p3, p4, p5, p6, p7, p7, p9 })
-        const uri = encodeURI(uq() + name + "?" + (p0?"p0=" + p0 : "")
-        + (p1?"&p1=" + p1 : "") + (p2?"&p2=" + p2 : ""))
-        console.log(uri)
-        let response = await fetch(uri)
-        let data = await response.json()
-        return data
-    } catch (error) {
-        throw error
-    } finally {
-        // console.log("Hide loading indicator for " + name)
-        hideLoadingIndicator()
-    }
-}
-
-function userQueryReg(onData, onError, name, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9) {
-    // console.log("Show loading indicator for " + name)
+function sqlBrokerUQ(profile,uqName,uqParameters,onSuccessCallback, showErrorCallback,timeout) {
+    if(!uqName) throw new Error("No UQ Name defined")
+    if(!onSuccessCallback) throw new Error("No onSuccessCallback defined for " + uqName)
+    if(!showErrorCallback) throw new Error("No showErrorCallback defined for " + uqName)
+    const url = uq() + `${uqName}?` + (profile ? "profile=" + profile : "") + (uqParameters ? uqParameters : "")
+    console.log(url)
     showLoadingIndicator()
-    // This jQuery get had some issues, so I changed over to fetch
-    // return await $.get(uq() + name, { p0, p1, p2, p3, p4, p5, p6, p7, p7, p9 })
-    const uri = encodeURI(uq() + name + "?" + (p0?"p0=" + p0 : "")
-    + (p1?"&p1=" + p1 : "") + (p2?"&p2=" + p2 : ""))
-    console.log(uri)
-    let response = fetch(uri)
-        .catch(error => onError(error))
-        .then(r => {
-            if(r.status === 400) {
-                return r.json()
-            } else return r.json
-        })
-        .then(data => onData(data))
-        .finally(hideLoadingIndicator())
+    $.ajax({ url, 
+      error: function(jqXHR,textStatus,errorThrown) {
+        if(jqXHR.responseJSON && jqXHR.responseJSON.errorText) showErrorCallback(jqXHR.responseJSON.errorText) 
+        else showErrorCallback(textStatus)
+        console.log(textStatus,errorThrown,jqXHR)
+      },
+      success: function(sqlResult) {
+        if(sqlResult.data) {
+          onSuccessCallback(sqlResult)
+        }
+        console.log("Success for " + url,sqlResult)
+      },
+      complete: hideLoadingIndicator, 
+      timeout: timeout ? timeout : globalTimeout(),
+    })
 }
 
+function sqlBrokerSQL(profile,sqlQuery,onSuccessCallback, showErrorCallback,timeout) {
+    if(!sqlQuery) throw new Error("No sqlQuery defined")
+    if(!onSuccessCallback) throw new Error("No onSuccessCallback defined")
+    if(!showErrorCallback) throw new Error("No showErrorCallback defined")
+    const url = sql() + (profile ? "?profile=" + profile : "")
+    console.log(url,sqlQuery)
+    showLoadingIndicator()
+    $.ajax({ url, type: "POST", dataType: "json", 
+      contentType: "application/json", processData: false,
+      data: JSON.stringify({ SQL: sqlQuery }),
+      error: function(jqXHR,textStatus,errorThrown) {
+        if(jqXHR.responseJSON && jqXHR.responseJSON.errorText) showErrorCallback(jqXHR.responseJSON.errorText) 
+        else showErrorCallback(textStatus)
+        console.log(textStatus,errorThrown,jqXHR)
+      },
+      success: function(sqlResult) {
+        if(sqlResult.data && sqlResult.data.length > 0) {
+            onSuccessCallback(sqlResult)
+        }
+        console.log("Success on SQL",sqlResult)
+      },
+      complete: hideLoadingIndicator, 
+      timeout: timeout ? timeout : globalTimeout(),
+    })
+  }
+
+
+function sqlBrokerGetBO(profile,boName,boId,onSuccessCallback, showErrorCallback,timeout) {
+    if(!boName) throw new Error("No BO Name defined")
+    if(!boId) throw new Error("No BO ID defined for " + boName)
+    if(!onSuccessCallback) throw new Error("No onSuccessCallback defined for " + boName)
+    if(!showErrorCallback) throw new Error("No showErrorCallback defined for " + boName)
+    const url = bo() + `${boName}/${boId}` + (profile ? "?profile=" + profile : "")
+    console.log(url)
+    showLoadingIndicator()
+    $.ajax({ url, 
+      error: function(jqXHR,textStatus,errorThrown) {
+        if(jqXHR.responseJSON && jqXHR.responseJSON.errorText) showErrorCallback(jqXHR.responseJSON.errorText) 
+        else showErrorCallback(textStatus)
+        console.log(textStatus,errorThrown,jqXHR)
+      },
+      success: function(boResult) {
+        if(boResult.bo) {
+          onSuccessCallback(boResult)
+        }
+        console.log("Success for " + url, boResult)
+      },
+      complete: hideLoadingIndicator, 
+      timeout: timeout ? timeout : globalTimeout(),
+    })
+}
+
+function sqlBrokerPostBO(profile,boName, boData, onSuccessCallback, showErrorCallback,timeout) {
+    if(!boName) throw new Error("No BO Name defined")
+    if(!boData) throw new Error("No BO Data defined for " + boName)
+    if(!onSuccessCallback) throw new Error("No onSuccessCallback defined for " + boName)
+    if(!showErrorCallback) throw new Error("No showErrorCallback defined for " + boName)
+    const url = bo() + `${boName}` + (profile ? "?profile=" + profile : "")
+    console.log(url)
+    showLoadingIndicator("Processing ...")
+    $.ajax({ url, type: "POST", dataType: "json", 
+    contentType: "application/json", processData: false,
+    data: JSON.stringify(boData),
+      error: function(jqXHR,textStatus,errorThrown) {
+        if(jqXHR.responseJSON && jqXHR.responseJSON.errorText) showErrorCallback(jqXHR.responseJSON.errorText) 
+        else showErrorCallback(textStatus)
+        console.log(textStatus,errorThrown,jqXHR)
+      },
+      success: function(boResult) {
+        if(boResult.bo) {
+          onSuccessCallback(boResult)
+        }
+        console.log("Success for " + url,boResult)
+      },
+      complete: hideLoadingIndicator, 
+      timeout: timeout ? timeout : globalTimeout(),
+    })
+}
+
+function sqlBrokerMultiReq(profile,mrData, onSuccessCallback, showErrorCallback,timeout) {
+    if(!mrData) throw new Error("No MR Data defined")
+    if(!onSuccessCallback) throw new Error("No onSuccessCallback defined")
+    if(!showErrorCallback) throw new Error("No showErrorCallback defined")
+    const url = mr() + (profile ? "?profile=" + profile : "")
+    console.log(url)
+    showLoadingIndicator("Processing ...")
+    $.ajax({ url, type: "POST", dataType: "json", 
+    contentType: "application/json", processData: false,
+    data: JSON.stringify(mrData),
+      error: function(jqXHR,textStatus,errorThrown) {
+        if(jqXHR.responseJSON && jqXHR.responseJSON.errorText) showErrorCallback(jqXHR.responseJSON.errorText) 
+        else showErrorCallback(textStatus)
+        console.log(textStatus,errorThrown,jqXHR)
+      },
+      success: function(mrResult) {
+        if(mrResult.errorCode == 0) {
+          onSuccessCallback(mrResult)
+        }
+        console.log("Success for " + url, mrResult)
+      },
+      complete: hideLoadingIndicator, 
+      timeout: timeout ? timeout : globalTimeout(),
+    })
+}
 
 async function sleepAsync(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -148,6 +228,10 @@ function saveUserToLocalStore(userDetails) {
 function getUserDetailsFromLocalStore() {
     return JSON.parse(localStorage.getItem("userDetails"))
 }
+function removeUserDetailsFromLocalStore() {
+    return localStorage.removeItem("userDetails")
+}
+
 function saveResCodeToLocalStore(resCode) {
     localStorage.setItem("resCode", resCode)
 }

@@ -1,6 +1,6 @@
 {
   "name": "t11jobwatch",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A manufacturing job tracking application for SAP B1 or any ERP system",
   "main": "index.js",
   "scripts": {
