@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "JobWatch",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
