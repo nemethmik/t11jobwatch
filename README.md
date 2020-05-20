@@ -25,4 +25,6 @@ The best thing I really like with JQM is the single-page approach with navigatio
     - ///&lt;reference path="../../node_modules/@types/jquery/index.d.ts"/>
     - ///&lt;reference path="../../node_modules/@types/jquerymobile/index.d.ts"/>
 
+   ## Additional modules for React and TypeScript support
+   - npm install @types/jquerymobile @types/jquery @types/react @types/react-dom react react-dom
    

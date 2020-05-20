@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
+    "copyreact":"copyfiles -f ./node_modules/react/umd/react.development.js node_modules/react-dom/umd/react-dom.development.js ./JobWatch/react",
     "httpUSELIVESERVERINSTEAD": "npx http-server JobWatch -c1-1 -o",
-    "build": "watchify src/js/app.ts -v -p [tsify --rootDir ./src --outDir ./JobWatch] --debug -o ./JobWatch/js/bundle.js"
+    "build": "watchify src/js/runningJobPage.tsx -v -p [tsify --rootDir ./src --outDir ./JobWatch] --debug -o ./JobWatch/js/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -25,12 +26,17 @@
   },
   "homepage": "https://github.com/nemethmik/t11jobwatch#readme",
   "devDependencies": {
+    "copyfiles": "^2.2.0",
     "tsify": "^4.0.1",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.3",
     "watchify": "^3.11.1"
   },
   "dependencies": {
-    "@types/jquery": "^3.3.35",
-    "@types/jquerymobile": "^1.4.30"
+    "@types/jquery": "^3.3.38",
+    "@types/jquerymobile": "^1.4.30",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
